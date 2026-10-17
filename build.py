@@ -49,7 +49,7 @@ def weather():
     try:
         c = json.loads(get(url))["current"]
     except Exception as e:
-        print("Wetter-Fehler", e); return None, []
+        print("Wetter-Fehler", e); return None, [], []
     codes = {0: "klar", 1: "heiter", 2: "wolkig", 3: "bedeckt", 45: "Nebel", 48: "Reifnebel",
              51: "Nieselregen", 61: "Regen", 63: "Regen", 65: "Starkregen", 71: "Schnee",
              73: "Schnee", 75: "Starker Schneefall", 80: "Schauer", 81: "Schauer",
@@ -61,7 +61,13 @@ def weather():
     if c["weather_code"] in (75,): alerts.append("Starker Schneefall an der Lübecker Bucht.")
     if c["weather_code"] >= 95: alerts.append("Gewitter über der Lübecker Bucht – Strand und Seebrücke meiden!")
     if c["wind_gusts_10m"] >= 60: alerts.append("Sturmböen – Boote bleiben im Hafen.")
-    return txt, alerts
+    kinds = []
+    if c["weather_code"] >= 95: kinds.append("gewitter")
+    if c["wind_gusts_10m"] >= 60: kinds.append("sturm")
+    if c["weather_code"] in (45, 48): kinds.append("nebel")
+    if c["weather_code"] in (65, 82): kinds.append("regen")
+    if c["weather_code"] == 75: kinds.append("schnee")
+    return txt, alerts, kinds
 
 def coffee():
     try:
@@ -83,11 +89,50 @@ def price_rows():
         rows += f"<tr><th scope='row'>{html.escape(r['name'])}</th><td>{w}</td><td>{html.escape(r.get('stand') or '–')}</td></tr>"
     return rows, p.get("hinweis", ""), tick
 
-def letter():
-    L = json.loads((ROOT / "data/letters.json").read_text(encoding="utf-8"))
-    l = L[(NOW.date() - dt.date(2026, 10, 17)).days % len(L)]
+MONTHS = "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split()
+DAYS_DE = "Montag Dienstag Mittwoch Donnerstag Freitag Samstag Sonntag".split()
+LEDGER = OUT / "briefe-archiv.json"
+
+def ledger():
+    try: return json.loads(LEDGER.read_text(encoding="utf-8"))
+    except Exception: return {}
+
+def pick_letter(kinds):
+    """Ein Brief pro Tag: der erste Build des Tages legt ihn fest; bei Wetterwarnung schreibt Herr Huber."""
+    led, key = ledger(), NOW.date().isoformat()
+    if key not in led:
+        L = json.loads((ROOT / "data/letters.json").read_text(encoding="utf-8"))
+        l = L[(NOW.date() - dt.date(2026, 10, 17)).days % len(L)]
+        W = json.loads((ROOT / "data/wetterbriefe.json").read_text(encoding="utf-8"))
+        for k in kinds:
+            if k in W: l = dict(W[k], wetter=True); break
+        led[key] = l
+        OUT.mkdir(exist_ok=True)
+        LEDGER.write_text(json.dumps(led, ensure_ascii=False, indent=1), encoding="utf-8")
+    return led[key]
+
+def render_letter(l):
+    F = json.loads((ROOT / "data/figuren.json").read_text(encoding="utf-8")).get(l["autor"], {})
     paras = "".join(f"<p>{html.escape(t)}</p>" for t in l["text"].split("\n"))
-    return f"<h3>{html.escape(l['titel'])}</h3>{paras}<p class='sig'>– {html.escape(l['autor'])}, {html.escape(l['ort'])}</p>"
+    badge = "<p class='badge'>Wetterbrief – erfundene Zuschrift zur Wetterlage</p>" if l.get("wetter") else ""
+    antw = f"<p class='antwort'><strong>Die Redaktion antwortet:</strong> {html.escape(l['antwort'])}</p>" if l.get("antwort") else ""
+    stamp = f"<div class='stamp' aria-hidden='true'>{ICONS[F.get('icon', 0) % 4]}</div>"
+    return (f"{badge}<article class='brief'><h3>{html.escape(l['titel'])}</h3>{paras}"
+            f"<div class='absender'>{stamp}<p class='sig'>{html.escape(F.get('gruss', 'Mit freundlichen Grüßen'))}<br>"
+            f"<strong>{html.escape(l['autor'])}</strong>, {html.escape(l['ort'])}<br><span class='small'>{html.escape(F.get('kurz', ''))}</span></p></div>"
+            f"{antw}</article>")
+
+def write_briefe():
+    led, items = ledger(), ""
+    for k in sorted(led, reverse=True):
+        d = dt.date.fromisoformat(k)
+        items += (f"<section class='card letter'><h2>{DAYS_DE[d.weekday()]}, {d.day}. {MONTHS[d.month-1]} {d.year}</h2>"
+                  f"{render_letter(led[k])}</section>")
+    pg = ("<!doctype html><html lang='de'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
+          "<title>Leserbriefe-Archiv – Der Küsten-Kurier</title><link rel='stylesheet' href='style.css'></head><body><main class='wrap'>"
+          "<p><a href='index.html'>← Zur aktuellen Ausgabe</a></p><h1>Leserbriefe-Archiv</h1>"
+          "<p class='small'>Alle Zuschriften sind erfunden – Satire, keine echte Leserpost.</p>" + items + "</main></body></html>")
+    (OUT / "briefe.html").write_text(pg, encoding="utf-8")
 
 def cams():
     C = json.loads((ROOT / "data/webcams.json").read_text(encoding="utf-8"))
@@ -106,7 +151,7 @@ def build():
         li = "".join(f"<li><a href='{html.escape(u)}' rel='noopener'>{html.escape(t)}</a> <span class='src'>{html.escape(s)}, {html.escape(d)}</span></li>"
                      for t, u, s, d in items) or "<li>Gerade keine Meldungen abrufbar.</li>"
         sec += f"<section aria-labelledby='s{i}' class='card'><h2 id='s{i}'>{ICONS[i % 4]}{html.escape(title)}</h2><ul class='news'>{li}</ul></section>"
-    wtxt, alerts = weather()
+    wtxt, alerts, kinds = weather()
     alert_html = "".join(f"<li>{html.escape(a)}</li>" for a in alerts)
     rows, hint, tick = price_rows()
     months = "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split()
@@ -114,7 +159,7 @@ def build():
     datum = f"{days[NOW.weekday()]}, {NOW.day}. {months[NOW.month-1]} {NOW.year}, {NOW:%H:%M} Uhr"
     page = {"NEWS": sec, "DATUM": datum, "WETTER": html.escape(wtxt or "Wetterdaten derzeit nicht verfügbar."),
             "ALERTS": f"<div class='alert' role='alert'><h2>Wetterwarnung</h2><ul>{alert_html}</ul></div>" if alerts else "",
-            "PREISE": rows, "TICKER": tick, "LEAD": lead or "<article class='lead'><h2>Heute keine Meldungen abrufbar</h2></article>", "HINWEIS": html.escape(hint), "BRIEF": letter(), "CAMS": cams(), "YEAR": str(NOW.year)}
+            "PREISE": rows, "TICKER": tick, "LEAD": lead or "<article class='lead'><h2>Heute keine Meldungen abrufbar</h2></article>", "HINWEIS": html.escape(hint), "BRIEF": render_letter(pick_letter(kinds)), "CAMS": cams(), "YEAR": str(NOW.year)}
     def render(root):
         s = tpl.replace("{{ROOT}}", root)
         for k, v in page.items(): s = s.replace("{{%s}}" % k, v)
@@ -131,6 +176,7 @@ def build():
             "<title>Archiv – Der Küsten-Kurier</title><link rel='stylesheet' href='../style.css'></head><body><main class='wrap'>"
             f"<p><a href='../index.html'>← Zur aktuellen Ausgabe</a></p><h1>Archiv</h1><ul class='archive'>{li}</ul></main></body></html>")
     (OUT / "archive" / "index.html").write_text(arch, encoding="utf-8")
+    write_briefe()
 
 if __name__ == "__main__":
     build()
