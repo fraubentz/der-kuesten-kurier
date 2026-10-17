@@ -3,7 +3,8 @@
   "titel": "Zu laut, die Möwen!",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Seit Tagen kreischen die Möwen schon vor sieben Uhr. Ich habe die Stadt gebeten, etwas zu unternehmen. Man schickte mir ein Formular. Ich fordere Ruhezeiten für Vögel!"
+  "text": "Seit Tagen kreischen die Möwen schon vor sieben Uhr. Ich habe die Stadt gebeten, etwas zu unternehmen. Man schickte mir ein Formular. Ich fordere Ruhezeiten für Vögel!",
+  "antwort": "Die Redaktion bittet die Möwen um Verständnis, hat aber bislang keine Antwort erhalten."
  },
  {
   "titel": "Kaffee ist keine Verhandlungssache",
@@ -15,19 +16,22 @@
   "titel": "Strandkörbe gehören nummeriert",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Am Samstag saß ein Fremder in meinem Strandkorb, obwohl ich ihn nur geistig reserviert hatte. Das ist Anarchie. Ich verlange Klarheit."
+  "text": "Am Samstag saß ein Fremder in meinem Strandkorb, obwohl ich ihn nur geistig reserviert hatte. Das ist Anarchie. Ich verlange Klarheit.",
+  "antwort": "Strandkörbe lassen sich leider nicht geistig reservieren. Die Redaktion empfiehlt ein Handtuch."
  },
  {
   "titel": "Der Hering hat's schwer",
   "autor": "Käpt'n Jörn Thießen",
   "ort": "Scharbeutz",
-  "text": "Wer morgens um vier rausfährt, weiß, was ein Fisch wert ist. Kaufen Sie lieber direkt beim Kutter als am Imbiss zu Mondpreisen."
+  "text": "Wer morgens um vier rausfährt, weiß, was ein Fisch wert ist. Kaufen Sie lieber direkt beim Kutter als am Imbiss zu Mondpreisen.",
+  "antwort": "Der Hering bedankt sich."
  },
  {
   "titel": "Mülltrennung ist Charakterfrage",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Mein Nachbar wirft Joghurtbecher samt Deckel in die gelbe Tonne. Ungespült! Ich habe ihm einen Zettel geschrieben, in vier Absätzen."
+  "text": "Mein Nachbar wirft Joghurtbecher samt Deckel in die gelbe Tonne. Ungespült! Ich habe ihm einen Zettel geschrieben, in vier Absätzen.",
+  "antwort": "Die Redaktion hat den Joghurtbecher geprüft: Er war sauber. Der Nachbar bittet um Gelassenheit."
  },
  {
   "titel": "Lob für die Fähre",
@@ -39,7 +43,8 @@
   "titel": "Fahrräder auf der Promenade",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Radfahrer klingeln, als gehörte ihnen die Welt. Ich bin 38 Jahre unfallfrei gelaufen und lasse mir das nicht verderben!"
+  "text": "Radfahrer klingeln, als gehörte ihnen die Welt. Ich bin 38 Jahre unfallfrei gelaufen und lasse mir das nicht verderben!",
+  "antwort": "Die Klingel ist ausdrücklich erlaubt. Die Redaktion rät zu Ohrenschutz."
  },
  {
   "titel": "Berliner Verhältnisse",
@@ -51,13 +56,15 @@
   "titel": "Teezeit ist heilig",
   "autor": "Frau Brunhilde Kowalski",
   "ort": "Katzenfurt",
-  "text": "Ostfriesentee braucht Kluntje und Ruhe, kein Rührstäbchen und kein Handy. Wer anderes behauptet, hat nie dem Regen zugesehen."
+  "text": "Ostfriesentee braucht Kluntje und Ruhe, kein Rührstäbchen und kein Handy. Wer anderes behauptet, hat nie dem Regen zugesehen.",
+  "antwort": "Die Redaktion trinkt mit."
  },
  {
   "titel": "Schlaglöcher auf dem Weg zur Küste",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Mein Auto hat auf der Zufahrt dreimal geächzt. Ich werde die Schlaglöcher zählen und dem Bürgermeister die Liste schicken."
+  "text": "Mein Auto hat auf der Zufahrt dreimal geächzt. Ich werde die Schlaglöcher zählen und dem Bürgermeister die Liste schicken.",
+  "antwort": "Die Liste der Schlaglöcher liegt dem Bürgermeister noch nicht vor, der Kaffee schon."
  },
  {
   "titel": "Sardinen sind kein Katzenfutter",
@@ -69,7 +76,8 @@
   "titel": "Zu viele Touristen im Sommer",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "An der Ostsee stand ich zwanzig Minuten für ein Eis an. Zwanzig! Früher hat man sich zu helfen gewusst und das Eis selbst mitgebracht."
+  "text": "An der Ostsee stand ich zwanzig Minuten für ein Eis an. Zwanzig! Früher hat man sich zu helfen gewusst und das Eis selbst mitgebracht.",
+  "antwort": "Die Redaktion empfiehlt, die Eisschlange als geselliges Beisammensein zu betrachten."
  },
  {
   "titel": "Dank an die Rettungsschwimmer",
@@ -81,13 +89,15 @@
   "titel": "Hundeverbot am Strand?",
   "autor": "Dieter Plönske",
   "ort": "Berlin",
-  "text": "Mein Dackel liebt das Meer, die Möwen liebt er weniger. Ist es zu viel verlangt, dass sich beide mit Abstand begegnen?"
+  "text": "Mein Dackel liebt das Meer, die Möwen liebt er weniger. Ist es zu viel verlangt, dass sich beide mit Abstand begegnen?",
+  "antwort": "Möwen und Dackel wurden getrennt befragt. Beide bestreiten alles."
  },
  {
   "titel": "Wetterbericht, ich bitte Sie",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Man sagte Sonne voraus, es regnete in Strömen. Ich verlange eine förmliche Entschuldigung, schriftlich und in Schönschrift."
+  "text": "Man sagte Sonne voraus, es regnete in Strömen. Ich verlange eine förmliche Entschuldigung, schriftlich und in Schönschrift.",
+  "antwort": "Die Sonne war für den Nachbarort angekündigt. Eine Entschuldigung in Schönschrift ist in Arbeit."
  },
  {
   "titel": "Lieblingsbäcker an der Küste",
@@ -105,7 +115,8 @@
   "titel": "Parkplatz-Chaos",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Ein Auto parkte schräg, anderthalb Plätze lang. Ich habe das Kennzeichen notiert. Das Ordnungsamt bekommt Post, in Kopie an die Presse."
+  "text": "Ein Auto parkte schräg, anderthalb Plätze lang. Ich habe das Kennzeichen notiert. Das Ordnungsamt bekommt Post, in Kopie an die Presse.",
+  "antwort": "Das Ordnungsamt hat den Brief erhalten und mit einem Kreuzchen versehen."
  },
  {
   "titel": "Winter an der Ostsee",
@@ -114,22 +125,23 @@
   "text": "Im Winter gehört der Strand uns. Nebel, Möwenruf, ein heißer Tee in der Hand. Wer das nicht liebt, war nie da."
  },
  {
-  "titel": "Die Sache mit dem Ahornsirup",
-  "autor": "Dieter Plönske",
-  "ort": "Berlin",
-  "text": "Meine Nichte aus Toronto brachte Ahornsirup mit. Zum Pfannkuchen perfekt, zum Hering fraglich. Ich werde es testen."
+  "titel": "Grüße aus Halifax",
+  "autor": "Margaret Tremblay",
+  "ort": "Halifax, Kanada",
+  "text": "Liebe Redaktion, ich lese Ihre Zeitung mit Wörterbuch und Freude. In Halifax riecht der Hafen nach Hummer, in Scharbeutz nach Fischbrötchen, und beides ist Heimat. Meine Tante aus Wetzlar schreibt, dass Ahornsirup auf Pfannkuchen auch bei Ihnen Anerkennung findet.\nBitte berichten Sie mehr über Ihre Möwen. Unsere sind ebenfalls frech."
  },
  {
   "titel": "Radio statt Smartphone",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Am Strand höre ich nur noch Piepen. Früher lief das Radio und alle waren zufrieden. Ich schlage ein Handyverbot vor."
+  "text": "Am Strand höre ich nur noch Piepen. Früher lief das Radio und alle waren zufrieden. Ich schlage ein Handyverbot vor.",
+  "antwort": "Die Redaktion hört selbst gern Radio, allerdings nur mit Kopfhörern."
  },
  {
-  "titel": "Danke, Sanitäter!",
-  "autor": "Inge Möller",
-  "ort": "Timmendorfer Strand",
-  "text": "Beim Spaziergang bin ich gestürzt. Zwei junge Männer haben mich liebevoll versorgt. So geht Nächstenliebe."
+  "titel": "Wellen in Nazaré",
+  "autor": "Joaquim Pereira",
+  "ort": "Nazaré, Portugal",
+  "text": "Verehrte Redaktion, wenn im Winter die großen Wellen kommen, steht ganz Nazaré am Leuchtturm. Die Fischer legen die Netze aus, die Frauen trocknen den Fisch in der Sonne, und ich koche Caldeirada.\nWer Portugal besucht, soll bei uns vorbeischauen. Mit Brot und Wein ist jeder Gast willkommen."
  },
  {
   "titel": "Wieder Regen am Feiertag",
@@ -141,7 +153,8 @@
   "titel": "Beschwerde über Beschwerden",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Wenn niemand mehr meckert, geht die Ordnung verloren. Ich werde also weiterhin meine Pflicht tun."
+  "text": "Wenn niemand mehr meckert, geht die Ordnung verloren. Ich werde also weiterhin meine Pflicht tun.",
+  "antwort": "Die Redaktion dankt für die Beschwerde über Beschwerden und leitet sie an sich selbst weiter."
  },
  {
   "titel": "Mein Fisch am Freitag",
@@ -153,13 +166,15 @@
   "titel": "Berliner Schnauze",
   "autor": "Dieter Plönske",
   "ort": "Berlin",
-  "text": "Man sagt, wir seien unfreundlich. Stimmt nicht. Wir sind nur ehrlich, und das mit sehr viel Herz."
+  "text": "Man sagt, wir seien unfreundlich. Stimmt nicht. Wir sind nur ehrlich, und das mit sehr viel Herz.",
+  "antwort": "Berlin lässt grüßen, in dem ihm eigenen Ton."
  },
  {
   "titel": "Zug fällt aus",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Der Zug fiel aus, die Durchsage klang, als hätte jemand Spaß daran. Ich erwarte künftig Pünktlichkeit und ein Entschuldigungsschreiben."
+  "text": "Der Zug fiel aus, die Durchsage klang, als hätte jemand Spaß daran. Ich erwarte künftig Pünktlichkeit und ein Entschuldigungsschreiben.",
+  "antwort": "Die Durchsage wurde überarbeitet. Der Zug nicht."
  },
  {
   "titel": "Ein Gruß aus Katzenfurt",
@@ -171,7 +186,8 @@
   "titel": "Möwen, die Zweite",
   "autor": "Herr Huber",
   "ort": "Wetzlar",
-  "text": "Ich komme auf meinen ersten Brief zurück. Die Möwen kreischen weiter. Das Formular ist inzwischen eingereicht, in dreifacher Ausfertigung."
+  "text": "Ich komme auf meinen ersten Brief zurück. Die Möwen kreischen weiter. Das Formular ist inzwischen eingereicht, in dreifacher Ausfertigung.",
+  "antwort": "Das Formular wurde bearbeitet. Die Möwen sind weiterhin nicht erreichbar."
  },
  {
   "titel": "Dank für die Zeitung",
