@@ -1,0 +1,37 @@
+{
+ "nebel": {
+  "titel": "Nebel, Nebel, überall Nebel!",
+  "autor": "Herr Huber",
+  "ort": "Wetzlar",
+  "text": "Man sieht die eigene Hand nicht vor Augen, geschweige denn die Ordnungswidrigkeiten der anderen. Ich fordere Nebelscheinwerfer für Fußgänger und eine Nebelschlussleuchte für Dackel.",
+  "antwort": "Die Redaktion hat im Nebel nichts gesehen, aber vieles gehört."
+ },
+ "regen": {
+  "titel": "Es regnet, und zwar von oben",
+  "autor": "Herr Huber",
+  "ort": "Wetzlar",
+  "text": "Das war früher nicht so. Ich habe zwei Schirme dabei und verlange, dass Pfützen mit Schildern in Augenhöhe gekennzeichnet werden.",
+  "antwort": "Die Pfützen wurden informiert und zeigen sich kooperativ."
+ },
+ "sturm": {
+  "titel": "Mein Hut ist weg!",
+  "autor": "Herr Huber",
+  "ort": "Wetzlar",
+  "text": "Der Sturm hat meinen Hut bis nach Lübeck getragen. Hut und Absender sind bekannt, die Fundstelle nicht. Ich erwarte vom Wind eine schriftliche Stellungnahme.",
+  "antwort": "Der Wind war für eine Stellungnahme nicht zu erreichen. Er ist unterwegs."
+ },
+ "gewitter": {
+  "titel": "Donner ohne Ankündigung",
+  "autor": "Herr Huber",
+  "ort": "Wetzlar",
+  "text": "Heute Nacht hat es gedonnert, und zwar ohne jede Vorwarnung. Ich schlage vor, Gewitter künftig drei Tage vorher per Aushang im Treppenhaus mitzuteilen.",
+  "antwort": "Die Redaktion leitet den Vorschlag an den Himmel weiter."
+ },
+ "schnee": {
+  "titel": "Schnee an der Küste!",
+  "autor": "Herr Huber",
+  "ort": "Wetzlar",
+  "text": "Wo soll das enden? Der Räumdienst kam um 6:58 Uhr, laut Satzung hätte er um 6:30 Uhr kommen müssen. Ich habe die Zeiten notiert.",
+  "antwort": "Die Redaktion hat Verständnis, empfiehlt aber Handschuhe."
+ }
+}
