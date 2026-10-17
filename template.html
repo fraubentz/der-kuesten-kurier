@@ -10,28 +10,34 @@
 <body>
 <a class="skip" href="#inhalt" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
 <header class="masthead">
-  <div class="wrap">
-    <svg class="logo" role="img" aria-labelledby="lt" viewBox="0 0 120 60"><title id="lt">Logo: ein Fisch vor einem Leuchtturm</title>
-      <path d="M8 34c14-22 38-22 56 0-18 22-42 22-56 0z" fill="#0b4f6c"/><path d="M64 34l22-16v32z" fill="#0b4f6c"/>
-      <circle cx="24" cy="30" r="3.5" fill="#fff"/><rect x="96" y="14" width="10" height="36" fill="#b3261e"/><path d="M94 14l7-8 7 8z" fill="#222"/></svg>
+  <div class="wrap brand">
+    <svg class="logo" role="img" aria-labelledby="lt" viewBox="0 0 140 70"><title id="lt">Logo: Fisch vor einem Leuchtturm</title>
+      <circle cx="70" cy="35" r="33" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="2 4"/>
+      <path d="M22 38c14-22 40-22 58 0-18 22-44 22-58 0z" fill="currentColor"/><path d="M80 38l20-15v30z" fill="currentColor"/>
+      <circle cx="37" cy="33" r="3.5" fill="#0b2e43"/><rect x="106" y="18" width="10" height="36" fill="#e8b4a8"/><path d="M104 18l7-9 7 9z" fill="currentColor"/>
+      <path d="M10 62c8-6 14 6 22 0s14 6 22 0 14 6 22 0 14 6 22 0 14 6 22 0" fill="none" stroke="currentColor" stroke-width="3"/></svg>
     <div>
+      <p class="edition" data-de="Seit heute frisch aus der Druckerei" data-en="Fresh from the press today">Seit heute frisch aus der Druckerei</p>
       <h1>Der Küsten-Kurier</h1>
       <p class="tag" data-de="Die Zeitung für Küste, Kutter und Kaffeetafel" data-en="The paper for coast, cutters and coffee time">Die Zeitung für Küste, Kutter und Kaffeetafel</p>
-      <p class="date">{{DATUM}}</p>
     </div>
   </div>
-  <div class="wrap tools" role="group" aria-label="Anzeigeoptionen">
-    <button id="bigger" type="button" aria-label="Schrift größer">A+</button>
-    <button id="smaller" type="button" aria-label="Schrift kleiner">A−</button>
-    <button id="contrast" type="button" aria-pressed="false" data-de="Hoher Kontrast" data-en="High contrast">Hoher Kontrast</button>
-    <button id="lang" type="button" lang="en" aria-pressed="false">English (Canada)</button>
-    <a href="{{ROOT}}archive/index.html" data-de="Archiv" data-en="Archive">Archiv</a>
-  </div>
+  <p class="dateline wrap">{{DATUM}}</p>
+  <svg class="waves" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 12c50-14 100-14 150 0s100 14 150 0 100-14 150 0 100 14 150 0 100-14 150 0 100 14 150 0 100-14 150 0 100 14 150 0V24H0z" fill="var(--bg)"/></svg>
 </header>
+<div class="wrap tools" role="group" aria-label="Anzeigeoptionen">
+  <button id="bigger" type="button" aria-label="Schrift größer">A+</button>
+  <button id="smaller" type="button" aria-label="Schrift kleiner">A−</button>
+  <button id="contrast" type="button" aria-pressed="false" data-de="Hoher Kontrast" data-en="High contrast">Hoher Kontrast</button>
+  <button id="lang" type="button" lang="en" aria-pressed="false">English (Canada)</button>
+  <a href="{{ROOT}}archive/index.html" data-de="Archiv" data-en="Archive">Archiv</a>
+</div>
 <main id="inhalt" class="wrap">
   <p id="status" class="sr-only" aria-live="polite"></p>
   {{ALERTS}}
-  <section class="card" aria-labelledby="w"><h2 id="w" data-de="Wetter an der Küste" data-en="Coastal weather">Wetter an der Küste</h2><p>{{WETTER}}</p></section>
+  <div class="banner" role="region" aria-labelledby="w"><h2 id="w" class="sr-only" data-de="Wetter an der Küste" data-en="Coastal weather">Wetter an der Küste</h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12c3-4 5-4 8 0s5 4 8 0 3-2 4-1M2 18c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/></svg> {{WETTER}}</div>
+  <ul class="ticker" aria-label="Preise des Tages">{{TICKER}}</ul>
+  {{LEAD}}
   <div class="grid">{{NEWS}}</div>
   <section class="card" aria-labelledby="p"><h2 id="p" data-de="Fisch-, Kaffee- und Teepreise" data-en="Fish, coffee and tea prices">Fisch-, Kaffee- und Teepreise</h2>
     <div class="scroll"><table><caption class="sr-only">Preise</caption>
@@ -41,7 +47,7 @@
   <section class="card letter" aria-labelledby="l"><h2 id="l" data-de="Leserbrief des Tages" data-en="Letter of the day">Leserbrief des Tages</h2>
     <p class="small" data-de="Erfundene Zuschrift – Satire, keine echte Leserpost." data-en="Invented letter – satire, not real reader mail.">Erfundene Zuschrift – Satire, keine echte Leserpost.</p>{{BRIEF}}</section>
 </main>
-<footer class="wrap"><p>© <span id="year">{{YEAR}}</span> Der Küsten-Kurier · <span data-de="Gestaltet und gepflegt von Wolfram und Poyi" data-en="Designed and maintained by Wolfram and Poyi">Gestaltet und gepflegt von Wolfram und Poyi</span></p></footer>
+<footer><div class="wrap"><p>© <span id="year">{{YEAR}}</span> Der Küsten-Kurier · <span data-de="Gestaltet und gepflegt von Wolfram und Poyi" data-en="Designed and maintained by Wolfram and Poyi">Gestaltet und gepflegt von Wolfram und Poyi</span></p></div></footer>
 <script src="{{ROOT}}app.js"></script>
 </body>
 </html>
