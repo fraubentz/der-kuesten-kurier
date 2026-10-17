@@ -1,0 +1,42 @@
+{
+ "Herr Huber": {
+  "kurz": "Spießbürger aus Wetzlar, beschwert sich über alles",
+  "gruss": "Hochachtungsvoll",
+  "icon": 1
+ },
+ "Frau Brunhilde Kowalski": {
+  "kurz": "Teetrinkerin aus Katzenfurt",
+  "gruss": "Herzlichst",
+  "icon": 0
+ },
+ "Inge Möller": {
+  "kurz": "Rentnerin aus Timmendorfer Strand",
+  "gruss": "Mit lieben Grüßen",
+  "icon": 3
+ },
+ "Käpt'n Jörn Thießen": {
+  "kurz": "Fischer aus Scharbeutz",
+  "gruss": "Mast- und Schotbruch",
+  "icon": 2
+ },
+ "Dieter Plönske": {
+  "kurz": "Berliner mit Dackel",
+  "gruss": "Beste Grüße aus der Hauptstadt",
+  "icon": 1
+ },
+ "Maria dos Santos": {
+  "kurz": "Hamburgerin mit portugiesischen Wurzeln",
+  "gruss": "Um abraço",
+  "icon": 0
+ },
+ "Margaret Tremblay": {
+  "kurz": "Leserin aus Halifax, Kanada",
+  "gruss": "Herzliche Grüße über den Atlantik",
+  "icon": 3
+ },
+ "Joaquim Pereira": {
+  "kurz": "Fischer aus Nazaré, Portugal",
+  "gruss": "Saudações da Nazaré",
+  "icon": 0
+ }
+}
