@@ -1,1 +1,47 @@
-
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Der Küsten-Kurier</title>
+<meta name="description" content="Die Zeitung für Küste, Kutter und Kaffeetafel.">
+<link rel="stylesheet" href="{{ROOT}}style.css">
+</head>
+<body>
+<a class="skip" href="#inhalt" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
+<header class="masthead">
+  <div class="wrap">
+    <svg class="logo" role="img" aria-labelledby="lt" viewBox="0 0 120 60"><title id="lt">Logo: ein Fisch vor einem Leuchtturm</title>
+      <path d="M8 34c14-22 38-22 56 0-18 22-42 22-56 0z" fill="#0b4f6c"/><path d="M64 34l22-16v32z" fill="#0b4f6c"/>
+      <circle cx="24" cy="30" r="3.5" fill="#fff"/><rect x="96" y="14" width="10" height="36" fill="#b3261e"/><path d="M94 14l7-8 7 8z" fill="#222"/></svg>
+    <div>
+      <h1>Der Küsten-Kurier</h1>
+      <p class="tag" data-de="Die Zeitung für Küste, Kutter und Kaffeetafel" data-en="The paper for coast, cutters and coffee time">Die Zeitung für Küste, Kutter und Kaffeetafel</p>
+      <p class="date">{{DATUM}}</p>
+    </div>
+  </div>
+  <div class="wrap tools" role="group" aria-label="Anzeigeoptionen">
+    <button id="bigger" type="button" aria-label="Schrift größer">A+</button>
+    <button id="smaller" type="button" aria-label="Schrift kleiner">A−</button>
+    <button id="contrast" type="button" aria-pressed="false" data-de="Hoher Kontrast" data-en="High contrast">Hoher Kontrast</button>
+    <button id="lang" type="button" lang="en" aria-pressed="false">English (Canada)</button>
+    <a href="{{ROOT}}archive/index.html" data-de="Archiv" data-en="Archive">Archiv</a>
+  </div>
+</header>
+<main id="inhalt" class="wrap">
+  <p id="status" class="sr-only" aria-live="polite"></p>
+  {{ALERTS}}
+  <section class="card" aria-labelledby="w"><h2 id="w" data-de="Wetter an der Küste" data-en="Coastal weather">Wetter an der Küste</h2><p>{{WETTER}}</p></section>
+  <div class="grid">{{NEWS}}</div>
+  <section class="card" aria-labelledby="p"><h2 id="p" data-de="Fisch-, Kaffee- und Teepreise" data-en="Fish, coffee and tea prices">Fisch-, Kaffee- und Teepreise</h2>
+    <div class="scroll"><table><caption class="sr-only">Preise</caption>
+      <thead><tr><th scope="col" data-de="Ware" data-en="Item">Ware</th><th scope="col" data-de="Preis" data-en="Price">Preis</th><th scope="col" data-de="Stand" data-en="As of">Stand</th></tr></thead>
+      <tbody>{{PREISE}}</tbody></table></div><p class="small">{{HINWEIS}}</p></section>
+  <section class="card" aria-labelledby="c"><h2 id="c" data-de="Tier-Webcams der Region" data-en="Animal webcams of the region">Tier-Webcams der Region</h2>{{CAMS}}</section>
+  <section class="card letter" aria-labelledby="l"><h2 id="l" data-de="Leserbrief des Tages" data-en="Letter of the day">Leserbrief des Tages</h2>
+    <p class="small" data-de="Erfundene Zuschrift – Satire, keine echte Leserpost." data-en="Invented letter – satire, not real reader mail.">Erfundene Zuschrift – Satire, keine echte Leserpost.</p>{{BRIEF}}</section>
+</main>
+<footer class="wrap"><p>© <span id="year">{{YEAR}}</span> Der Küsten-Kurier · <span data-de="Gestaltet und gepflegt von Wolfram und Poyi" data-en="Designed and maintained by Wolfram and Poyi">Gestaltet und gepflegt von Wolfram und Poyi</span></p></footer>
+<script src="{{ROOT}}app.js"></script>
+</body>
+</html>
