@@ -14,6 +14,15 @@ SECTIONS = [  # (Titel, Suchanfrage)
     ("Katzenfurt", "Katzenfurt"), ("Wetzlar", "Wetzlar"), ("Berlin", "Berlin"),
     ("Portugal", "Portugal"), ("Kanada", "Kanada"),
 ]
+def _i(body, fill=False):
+    a = 'fill="currentColor"' if fill else 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
+    return f'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false" {a}>{body}</svg>'
+ICONS = [
+    _i('<path d="M2 12c4-6 10-6 14 0-4 6-10 6-14 0zM16 12l6-5v10z"/><circle cx="7" cy="11" r="1" fill="#fff"/>', True),
+    _i('<circle cx="12" cy="5" r="2"/><path d="M12 7v14M8 11h8M4 13c0 5 4 8 8 8s8-3 8-8"/>'),
+    _i('<path d="M9 21l1.5-12h3L15 21zM10 9l2-5 2 5M6 21h12"/>'),
+    _i('<path d="M2 12c3-4 5-4 8 0s5 4 8 0 3-2 4-1M2 18c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/>'),
+]
 UA = {"User-Agent": "Mozilla/5.0 (Kuesten-Kurier build)"}
 
 def get(url):
@@ -66,11 +75,13 @@ def price_rows():
     c = coffee()
     for r in p["items"]:
         if r["name"] == "Kaffee (Arabica, Terminmarkt)" and c: r["wert"], r["stand"] = c, "live (Stooq)"
-    rows = ""
+    rows, tick = "", ""
+    for r in p["items"]:
+        tick += f"<li>{ICONS[0]}<span><strong>{html.escape(r['name'].split(' (')[0])}</strong> {html.escape(r['wert']) if r.get('wert') else '–'}</span></li>"
     for r in p["items"]:
         w = html.escape(r["wert"]) if r.get("wert") else "<em>derzeit keine Daten</em>"
         rows += f"<tr><th scope='row'>{html.escape(r['name'])}</th><td>{w}</td><td>{html.escape(r.get('stand') or '–')}</td></tr>"
-    return rows, p.get("hinweis", "")
+    return rows, p.get("hinweis", ""), tick
 
 def letter():
     L = json.loads((ROOT / "data/letters.json").read_text(encoding="utf-8"))
@@ -79,30 +90,31 @@ def letter():
     return f"<h3>{html.escape(l['titel'])}</h3>{paras}<p class='sig'>– {html.escape(l['autor'])}, {html.escape(l['ort'])}</p>"
 
 def cams():
-    try:
-        C = json.loads((ROOT / "data/webcams.json").read_text(encoding="utf-8") or "[]")
-    except Exception as e:
-        print("Webcam-Fehler", e); C = []
+    C = json.loads((ROOT / "data/webcams.json").read_text(encoding="utf-8"))
     if not C: return "<p>Derzeit sind noch keine geprüften Webcam-Links hinterlegt.</p>"
     return "<ul>" + "".join(f"<li><a href='{html.escape(c['url'])}' rel='noopener'>{html.escape(c['name'])}</a></li>" for c in C) + "</ul>"
 
 def build():
     tpl = (ROOT / "template.html").read_text(encoding="utf-8")
-    sec = ""
+    sec, lead = "", ""
     for i, (title, q) in enumerate(SECTIONS):
-        items = news(q)
+        items = news(q, 6 if i == 0 else 5)
+        if i == 0 and items:
+            t, u, s, d = items.pop(0)
+            lead = (f"<article class='lead' aria-labelledby='lead-h'><p class='kicker'>Aufmacher · {html.escape(s)}</p>"
+                    f"<h2 id='lead-h'><a href='{html.escape(u)}' rel='noopener'>{html.escape(t)}</a></h2><p class='src'>{html.escape(d)}</p></article>")
         li = "".join(f"<li><a href='{html.escape(u)}' rel='noopener'>{html.escape(t)}</a> <span class='src'>{html.escape(s)}, {html.escape(d)}</span></li>"
                      for t, u, s, d in items) or "<li>Gerade keine Meldungen abrufbar.</li>"
-        sec += f"<section aria-labelledby='s{i}' class='card'><h2 id='s{i}'>{html.escape(title)}</h2><ul class='news'>{li}</ul></section>"
+        sec += f"<section aria-labelledby='s{i}' class='card'><h2 id='s{i}'>{ICONS[i % 4]}{html.escape(title)}</h2><ul class='news'>{li}</ul></section>"
     wtxt, alerts = weather()
     alert_html = "".join(f"<li>{html.escape(a)}</li>" for a in alerts)
-    rows, hint = price_rows()
+    rows, hint, tick = price_rows()
     months = "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split()
     days = "Montag Dienstag Mittwoch Donnerstag Freitag Samstag Sonntag".split()
     datum = f"{days[NOW.weekday()]}, {NOW.day}. {months[NOW.month-1]} {NOW.year}, {NOW:%H:%M} Uhr"
     page = {"NEWS": sec, "DATUM": datum, "WETTER": html.escape(wtxt or "Wetterdaten derzeit nicht verfügbar."),
             "ALERTS": f"<div class='alert' role='alert'><h2>Wetterwarnung</h2><ul>{alert_html}</ul></div>" if alerts else "",
-            "PREISE": rows, "HINWEIS": html.escape(hint), "BRIEF": letter(), "CAMS": cams(), "YEAR": str(NOW.year)}
+            "PREISE": rows, "TICKER": tick, "LEAD": lead or "<article class='lead'><h2>Heute keine Meldungen abrufbar</h2></article>", "HINWEIS": html.escape(hint), "BRIEF": letter(), "CAMS": cams(), "YEAR": str(NOW.year)}
     def render(root):
         s = tpl.replace("{{ROOT}}", root)
         for k, v in page.items(): s = s.replace("{{%s}}" % k, v)
