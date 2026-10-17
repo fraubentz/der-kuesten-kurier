@@ -79,7 +79,10 @@ def letter():
     return f"<h3>{html.escape(l['titel'])}</h3>{paras}<p class='sig'>– {html.escape(l['autor'])}, {html.escape(l['ort'])}</p>"
 
 def cams():
-    C = json.loads((ROOT / "data/webcams.json").read_text(encoding="utf-8"))
+    try:
+        C = json.loads((ROOT / "data/webcams.json").read_text(encoding="utf-8") or "[]")
+    except Exception as e:
+        print("Webcam-Fehler", e); C = []
     if not C: return "<p>Derzeit sind noch keine geprüften Webcam-Links hinterlegt.</p>"
     return "<ul>" + "".join(f"<li><a href='{html.escape(c['url'])}' rel='noopener'>{html.escape(c['name'])}</a></li>" for c in C) + "</ul>"
 
