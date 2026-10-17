@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Baut den Küsten-Kurier: holt echte Meldungen (Google News RSS), Wetter (Open-Meteo),
 Kaffeepreis (Stooq), rendert docs/index.html und archiviert jede Ausgabe."""
-import json, html, datetime as dt, urllib.request, urllib.parse, xml.etree.ElementTree as ET
+import json, statistics, time, html, datetime as dt, urllib.request, urllib.parse, xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -24,6 +24,13 @@ ICONS = [
     _i('<path d="M2 12c3-4 5-4 8 0s5 4 8 0 3-2 4-1M2 18c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/>'),
 ]
 UA = {"User-Agent": "Mozilla/5.0 (Kuesten-Kurier build)"}
+
+def load(name, default):
+    try:
+        return json.loads((ROOT / "data" / name).read_text(encoding="utf-8") or "null") or default
+    except Exception as e:
+        print("Datenfehler", name, e)
+        return default
 
 def get(url):
     return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=20).read()
@@ -69,20 +76,65 @@ def weather():
     if c["weather_code"] == 75: kinds.append("schnee")
     return txt, alerts, kinds
 
-def coffee():
+def fred(sid):
+    """Letzter Monatswert einer FRED-Reihe (IMF-Rohstoffpreise), ohne API-Schlüssel."""
     try:
-        row = get("https://stooq.com/q/l/?s=kc.f&f=sd2c&h&e=csv").decode().splitlines()[1].split(",")
-        return f"{float(row[2]):.2f} US-Cent/lb (Stand {row[1]})"
+        for line in reversed(get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode().strip().splitlines()[1:]):
+            d, v = line.split(",")
+            if v not in (".", ""):
+                return float(v), int(d[:4]), int(d[5:7])
     except Exception as e:
-        print("Kaffee-Fehler", e); return None
+        print("FRED-Fehler", sid, e)
+    return None
+
+def de(x, nd=2): return f"{x:.{nd}f}".replace(".", ",")
+
+def coffee():
+    r = fred("PCOFFOTMUSDM")
+    return (f"{de(r[0], 1)} US-Cent/lb", f"IMF/FRED, Ø {MONTHS[r[2]-1]} {r[1]}") if r else None
+
+def salmon():
+    r = fred("PSALMUSDM")
+    return (f"{de(r[0])} US-$/kg (Zuchtlachs, Norwegen)", f"IMF/FRED, Ø {MONTHS[r[2]-1]} {r[1]}") if r else None
+
+def sardinen():
+    """Neueste Dosenpreise (EUR) je Marke aus Open Food Facts Prices; Marken ohne Eintrag entfallen."""
+    out = []
+    for b in load("sardinen.json", []):
+        best = None
+        for tag in b["tags"]:
+            try:
+                q = {"brands_tags": tag, "categories_tags": "en:sardines", "fields": "code,product_name", "page_size": 5}
+                prods = json.loads(get("https://world.openfoodfacts.org/api/v2/search?" + urllib.parse.urlencode(q))).get("products", [])
+                for pr in prods:
+                    time.sleep(0.5)
+                    q = {"product_code": pr["code"], "currency": "EUR", "order_by": "-date", "size": 3}
+                    for it in json.loads(get("https://prices.openfoodfacts.org/api/v1/prices?" + urllib.parse.urlencode(q))).get("items", []):
+                        if it.get("price_per") in (None, "UNIT") and it.get("price") and (not best or it["date"] > best[3]):
+                            best = (b["marke"], pr.get("product_name") or "Sardinen", float(it["price"]), it["date"])
+            except Exception as e:
+                print("Sardinen-Fehler", tag, e)
+            if best: break
+        if best: out.append(best)
+    return out
 
 def price_rows():
     p = json.loads((ROOT / "data/prices.json").read_text(encoding="utf-8"))
-    c = coffee()
+    c, s = coffee(), salmon()
     for r in p["items"]:
-        if r["name"] == "Kaffee (Arabica, Terminmarkt)" and c: r["wert"], r["stand"] = c, "live (Stooq)"
+        if r["name"].startswith("Kaffee") and c: r["wert"], r["stand"] = c
+        if r["name"] == "Lachs" and s: r["wert"], r["stand"] = s
+    sar = sardinen()
+    if sar:
+        med = statistics.median(x[2] for x in sar)
+        for i, r in enumerate(p["items"]):
+            if r["name"].startswith("Sardinen"):
+                r["wert"], r["stand"] = f"Ø {de(med)} € pro Dose ({len(sar)} Marken)", "Open Food Facts Prices"
+                p["items"][i+1:i+1] = [dict(name=f"– {m}: {n}", wert=f"{de(pr)} €", stand=f"{d[8:]}.{d[5:7]}.{d[:4]}", marke=True) for m, n, pr, d in sar]
+                break
     rows, tick = "", ""
     for r in p["items"]:
+        if r.get("marke"): continue
         tick += f"<li>{ICONS[0]}<span><strong>{html.escape(r['name'].split(' (')[0])}</strong> {html.escape(r['wert']) if r.get('wert') else '–'}</span></li>"
     for r in p["items"]:
         w = html.escape(r["wert"]) if r.get("wert") else "<em>derzeit keine Daten</em>"
@@ -101,9 +153,9 @@ def pick_letter(kinds):
     """Ein Brief pro Tag: der erste Build des Tages legt ihn fest; bei Wetterwarnung schreibt Herr Huber."""
     led, key = ledger(), NOW.date().isoformat()
     if key not in led:
-        L = json.loads((ROOT / "data/letters.json").read_text(encoding="utf-8"))
+        L = load("letters.json", [dict(titel="Heute kein Brief", autor="Die Redaktion", ort="Scharbeutz", text="Die Post hat uns heute leider nicht erreicht.")])
         l = L[(NOW.date() - dt.date(2026, 10, 17)).days % len(L)]
-        W = json.loads((ROOT / "data/wetterbriefe.json").read_text(encoding="utf-8"))
+        W = load("wetterbriefe.json", {})
         for k in kinds:
             if k in W: l = dict(W[k], wetter=True); break
         led[key] = l
@@ -112,9 +164,9 @@ def pick_letter(kinds):
     return led[key]
 
 def render_letter(l):
-    F = json.loads((ROOT / "data/figuren.json").read_text(encoding="utf-8")).get(l["autor"], {})
+    F = load("figuren.json", {}).get(l["autor"], {})
     paras = "".join(f"<p>{html.escape(t)}</p>" for t in l["text"].split("\n"))
-    badge = "<p class='badge'>Wetterbrief – erfundene Zuschrift zur Wetterlage</p>" if l.get("wetter") else ""
+    badge = "<p class='badge'>Wetterbrief</p>" if l.get("wetter") else ""
     antw = f"<p class='antwort'><strong>Die Redaktion antwortet:</strong> {html.escape(l['antwort'])}</p>" if l.get("antwort") else ""
     stamp = f"<div class='stamp' aria-hidden='true'>{ICONS[F.get('icon', 0) % 4]}</div>"
     return (f"{badge}<article class='brief'><h3>{html.escape(l['titel'])}</h3>{paras}"
@@ -131,7 +183,7 @@ def write_briefe():
     pg = ("<!doctype html><html lang='de'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
           "<title>Leserbriefe-Archiv – Der Küsten-Kurier</title><link rel='stylesheet' href='style.css'></head><body><main class='wrap'>"
           "<p><a href='index.html'>← Zur aktuellen Ausgabe</a></p><h1>Leserbriefe-Archiv</h1>"
-          "<p class='small'>Alle Zuschriften sind erfunden – Satire, keine echte Leserpost.</p>" + items + "</main></body></html>")
+          + items + "</main></body></html>")
     (OUT / "briefe.html").write_text(pg, encoding="utf-8")
 
 def cams():
