@@ -27,8 +27,8 @@ h1{font:700 clamp(2.2rem,7vw,4.2rem)/1.05 Georgia,"Palatino Linotype",serif;font
 .lead h2 a{color:inherit}
 .kicker{color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin:0}
 .src{font-size:.85rem;font-style:italic;margin:.2rem 0}.small{font-size:.85rem;font-style:italic}
-.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))}
-@media(min-width:62rem){.grid{grid-template-columns:repeat(3,1fr)}}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))}
+@media(min-width:62rem){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:.4rem;padding:1rem 1.25rem;margin:1rem 0}
 .grid .card{margin:0}
 h2{margin-top:0;color:var(--accent);border-bottom:2px solid var(--line);font-variant:small-caps;letter-spacing:.04em}
@@ -49,7 +49,7 @@ footer{background:var(--mast);color:var(--mastfg);margin-top:2rem;padding:1.5rem
 .sig{text-align:right;font-style:italic;margin:.5rem 0}
 .antwort{border-left:5px solid var(--accent);padding:.3rem 1rem;margin:1rem 0 0;background:var(--bg)}
 
-.duo{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));margin:1rem 0}
+.duo{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));margin:1rem 0}
 .duo .card{margin:0}
 .klatsch{border-top-color:var(--red)}.klatsch h3{margin:.2rem 0}
 .logbuch{font-family:"Courier New",Courier,monospace;border-top-style:dashed}
@@ -62,8 +62,11 @@ footer{background:var(--mast);color:var(--mastfg);margin-top:2rem;padding:1.5rem
 :root{--up:#17692e;--down:#b3261e}
 @media(prefers-color-scheme:dark){:root:not(.hc){--up:#7fdc97;--down:#ff8a80}}
 .hc{--up:#7fdc97;--down:#ff8a80}
-.boerse-grid{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr))}
+.boerse-grid{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))}
 .ware h3{margin:.2rem 0}
-.kurs{font-size:1.5rem;margin:.2rem 0}
+.kurs{font-size:1.5rem;margin:.2rem 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:.2rem .7rem}
 .delta{font-size:1rem;font-weight:700;white-space:nowrap}.delta.up{color:var(--up)}.delta.down{color:var(--down)}
 .ware table{margin:.5rem 0}.ware caption{text-align:left;font-weight:700;padding:.3rem 0}
+
+.grid>*,.duo>*,.boerse-grid>*{min-width:0}
+.card,.lead{overflow-wrap:break-word}
