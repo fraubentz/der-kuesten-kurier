@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Der Küsten-Kurier</title>
 <meta name="description" content="Die Zeitung für Küste, Kutter und Kaffeetafel.">
-<link rel="stylesheet" href="{{ROOT}}style.css">
+<link rel="stylesheet" href="{{ROOT}}style.css?v={{BUILD}}">
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -39,12 +39,12 @@
   {{FISCH}}
   <div class="grid">{{NEWS}}</div>
   {{BOERSE}}
-  <section class="card" aria-labelledby="c"><h2 id="c">Tier-Webcams der Region</h2>{{CAMS}}</section>
+  <section class="card" aria-labelledby="c"><h2 id="c">Webcams an der Küste</h2>{{CAMS}}</section>
   {{DUO}}
   <p class="small erfunden">Leserbriefe, Hafenklatsch und Logbuch sind frei erfunden.</p>
   <section class="card letter" aria-labelledby="l"><h2 id="l">Leserbrief des Tages</h2>{{BRIEF}}</section>
 </main>
 <footer><div class="wrap"><p>© <span id="year">{{YEAR}}</span> Der Küsten-Kurier · <span>Gestaltet und gepflegt von Wolfram und Poyi</span></p></div></footer>
-<script src="{{ROOT}}app.js"></script>
+<script src="{{ROOT}}app.js?v={{BUILD}}"></script>
 </body>
 </html>

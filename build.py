@@ -160,7 +160,6 @@ STAEDTE = [("Lissabon & Berlin", "EUR", "{} €", 2), ("London", "GBP", "£ {}",
            ("Tokio", "JPY", "¥ {}", 0), ("Vancouver", "CAD", "C$ {}", 2), ("Zürich", "CHF", "CHF {}", 2)]
 WAREN = [  # Name, FRED-Reihe, Kurs->US-$/kg, Anzeige, Portion in g, Portionstext, Yahoo-Symbol (oder None)
     ("Kaffee (Arabica)", "PCOFFOTMUSDM", lambda c: c / 100 / 0.45359237, lambda v: f"{de(v, 1)} US-Cent/lb", 18, "Die Bohnen in einem Espresso (18 g) kosten etwa", "KC=F"),
-    ("Tee (Schwarztee)", "PTEAUSDM", lambda c: c / 100, lambda v: f"{de(v, 1)} US-Cent/kg", 2, "Der Tee in einer Tasse (2 g) kostet etwa", None),
 ]
 
 def yahoo(symbol):
@@ -204,8 +203,8 @@ def boerse():
         cup = f"<p>{ptext} <strong>{de(usd * rates['EUR'] * gram / 1000)} €</strong>.</p>" if "EUR" in rates else ""
         out += (f"<article class='ware'><h3>{html.escape(name)}</h3><p class='kurs'><strong>{show(v)}</strong>{delta}</p>"
                 f"<p class='small'>{label}, Veränderung {vergleich}</p>"
-                f"<table><caption>Pro Kilogramm</caption><thead><tr><th scope='col'>Stadt</th><th scope='col'>Preis</th></tr></thead><tbody>{rows}</tbody></table>{cup}</article>")
-    return (f"<section class='card boerse' aria-labelledby='bo'><h2 id='bo'>Die Kaffee- und Tee-Börse</h2><div class='boerse-grid'>{out}</div>"
+                f"<div class='scroll'><table><caption>Pro Kilogramm</caption><thead><tr><th scope='col'>Stadt</th><th scope='col'>Preis</th></tr></thead><tbody>{rows}</tbody></table></div>{cup}</article>")
+    return (f"<section class='card boerse' aria-labelledby='bo'><h2 id='bo'>Die Kaffeebörse</h2><div class='boerse-grid'>{out}</div>"
             f"<p class='small'>Großhandelspreise für Rohware ({'; '.join(quellen) or 'Quellen derzeit nicht erreichbar'}), "
             "umgerechnet mit den Referenzkursen der EZB. Nicht, was Café oder Laden verlangen.</p></section>")
 
@@ -277,9 +276,10 @@ def duo():
     return f"<div class='duo'>{out}</div>" if out else ""
 
 def cams():
-    C = json.loads((ROOT / "data/webcams.json").read_text(encoding="utf-8"))
+    C = load("webcams.json", [])
     if not C: return "<p>Derzeit sind noch keine geprüften Webcam-Links hinterlegt.</p>"
-    return "<ul>" + "".join(f"<li><a href='{html.escape(c['url'])}' rel='noopener'>{html.escape(c['name'])}</a></li>" for c in C) + "</ul>"
+    return ("<ul>" + "".join(f"<li><a href='{html.escape(c['url'])}' rel='noopener'>{html.escape(c['name'])}</a></li>" for c in C) + "</ul>"
+            "<p class='small'>Die Links führen zu den Webcam-Seiten von Windy und Tourispo. Die Bilder gehören den jeweiligen Betreibern.</p>")
 
 def build():
     tpl = (ROOT / "template.html").read_text(encoding="utf-8")
@@ -316,7 +316,7 @@ def build():
     datum = f"{days[NOW.weekday()]}, {NOW.day}. {months[NOW.month-1]} {NOW.year}, {NOW:%H:%M} Uhr"
     page = {"NEWS": sec, "DUO": duo(), "DATUM": datum, "WETTER": html.escape(wtxt or "Wetterdaten derzeit nicht verfügbar."),
             "ALERTS": f"<div class='alert' role='alert'><h2>Wetterwarnung</h2><ul>{alert_html}</ul></div>" if alerts else "",
-            "BOERSE": boerse_html, "LEAD": lead, "FISCH": fisch, "BRIEF": render_letter(pick_letter(kinds)), "CAMS": cams(), "YEAR": str(NOW.year)}
+            "BOERSE": boerse_html, "LEAD": lead, "FISCH": fisch, "BRIEF": render_letter(pick_letter(kinds)), "CAMS": cams(), "YEAR": str(NOW.year), "BUILD": NOW.strftime("%Y%m%d%H%M")}
     def render(root):
         s = tpl.replace("{{ROOT}}", root)
         for k, v in page.items(): s = s.replace("{{%s}}" % k, v)
