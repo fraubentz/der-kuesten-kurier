@@ -35,6 +35,18 @@ def load(name, default):
 def get(url):
     return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=20).read()
 
+def direct(section, n=3):
+    """Direkte RSS-Feeds aus data/feeds.json (nur Einträge mit enabled=true); zeigt nur Überschrift, Link und Quelle."""
+    out = []
+    for f in load("feeds.json", {}).get(section, []):
+        if not f.get("enabled") or not f.get("url"): continue
+        try:
+            for i in ET.fromstring(get(f["url"])).findall(".//item")[:n]:
+                out.append((i.findtext("title", "").strip(), i.findtext("link", ""), f["name"], i.findtext("pubDate", "")[:16]))
+        except Exception as e:
+            print("Feed-Fehler", f["name"], e)
+    return out
+
 def news(query, n=5):
     url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
         {"q": query + " when:2d", "hl": "de", "gl": "DE", "ceid": "DE:de"})
@@ -186,6 +198,24 @@ def write_briefe():
           + items + "</main></body></html>")
     (OUT / "briefe.html").write_text(pg, encoding="utf-8")
 
+def tagesauswahl(name):
+    items = load(name, [])
+    if not isinstance(items, list) or not items: return None
+    return items[(NOW.date() - dt.date(2026, 10, 17)).days % len(items)]
+
+def duo():
+    """Hafenklatsch und Logbuch: je ein Eintrag pro Tag; fehlt die Datei oder ist sie leer, entfällt der Kasten."""
+    out, esc = "", html.escape
+    k = tagesauswahl("hafenklatsch.json")
+    if k and k.get("titel") and k.get("text"):
+        out += (f"<section class='card klatsch' aria-labelledby='hk'><h2 id='hk' data-de='Hafenklatsch' data-en='Harbour gossip'>Hafenklatsch</h2>"
+                f"<article><h3>{esc(k['titel'])}</h3><p>{esc(k['text'])}</p></article></section>")
+    l = tagesauswahl("logbuch.json")
+    if l and l.get("kutter") and l.get("text"):
+        out += (f"<section class='card logbuch' aria-labelledby='lb'><h2 id='lb' data-de='Logbuch' data-en=\"Ship's log\">Logbuch</h2>"
+                f"<p class='kutter'>{esc(l['kutter'])}</p><p>{esc(l['text'])}</p></section>")
+    return f"<div class='duo'>{out}</div>" if out else ""
+
 def cams():
     C = json.loads((ROOT / "data/webcams.json").read_text(encoding="utf-8"))
     if not C: return "<p>Derzeit sind noch keine geprüften Webcam-Links hinterlegt.</p>"
@@ -195,7 +225,10 @@ def build():
     tpl = (ROOT / "template.html").read_text(encoding="utf-8")
     sec, lead = "", ""
     for i, (title, q) in enumerate(SECTIONS):
-        items = news(q, 6 if i == 0 else 5)
+        cap = 6 if i == 0 else 5
+        items = direct(title)
+        seen = {x[0] for x in items}
+        items = (items + [x for x in news(q, cap) if x[0] not in seen])[:cap]
         if i == 0 and items:
             t, u, s, d = items.pop(0)
             lead = (f"<article class='lead' aria-labelledby='lead-h'><p class='kicker'>Aufmacher · {html.escape(s)}</p>"
@@ -209,7 +242,7 @@ def build():
     months = "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split()
     days = "Montag Dienstag Mittwoch Donnerstag Freitag Samstag Sonntag".split()
     datum = f"{days[NOW.weekday()]}, {NOW.day}. {months[NOW.month-1]} {NOW.year}, {NOW:%H:%M} Uhr"
-    page = {"NEWS": sec, "DATUM": datum, "WETTER": html.escape(wtxt or "Wetterdaten derzeit nicht verfügbar."),
+    page = {"NEWS": sec, "DUO": duo(), "DATUM": datum, "WETTER": html.escape(wtxt or "Wetterdaten derzeit nicht verfügbar."),
             "ALERTS": f"<div class='alert' role='alert'><h2>Wetterwarnung</h2><ul>{alert_html}</ul></div>" if alerts else "",
             "PREISE": rows, "TICKER": tick, "LEAD": lead or "<article class='lead'><h2>Heute keine Meldungen abrufbar</h2></article>", "HINWEIS": html.escape(hint), "BRIEF": render_letter(pick_letter(kinds)), "CAMS": cams(), "YEAR": str(NOW.year)}
     def render(root):

@@ -1,0 +1,42 @@
+{
+ "Deutschland": [
+  {
+   "name": "tagesschau.de",
+   "url": "https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml",
+   "enabled": false,
+   "grund": "Nutzungsbedingungen: nur privater, nicht-kommerzieller Gebrauch; Veröffentlichung nur bei CC-Lizenz"
+  }
+ ],
+ "Scharbeutz": [
+  {
+   "name": "tagesschau.de (Schleswig-Holstein)",
+   "url": "https://www.tagesschau.de/inland/regional/schleswigholstein/index~rss2.xml",
+   "enabled": false,
+   "grund": "wie oben"
+  }
+ ],
+ "Timmendorfer Strand": [
+  {
+   "name": "tagesschau.de (Schleswig-Holstein)",
+   "url": "https://www.tagesschau.de/inland/regional/schleswigholstein/index~rss2.xml",
+   "enabled": false,
+   "grund": "wie oben"
+  }
+ ],
+ "Wetzlar": [
+  {
+   "name": "hessenschau.de (Mittelhessen)",
+   "url": "https://www.hessenschau.de/mittelhessen/index.rss",
+   "enabled": true,
+   "grund": "Feed mit Anriss und Link; keine Nutzungsbedingungen gefunden, Überschrift und Link mit Quellenangabe"
+  }
+ ],
+ "Kanada": [
+  {
+   "name": "CBC News",
+   "url": "",
+   "enabled": false,
+   "grund": "CBC-Bedingungen verlangen für nicht-private Nutzung eine Vereinbarung"
+  }
+ ]
+}
