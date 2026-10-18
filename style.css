@@ -55,3 +55,15 @@ footer{background:var(--mast);color:var(--mastfg);margin-top:2rem;padding:1.5rem
 .logbuch{font-family:"Courier New",Courier,monospace;border-top-style:dashed}
 .kutter{margin:0;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
 .erfunden{text-align:center;margin:1rem 0}
+
+.fischblock{margin:1.5rem 0}
+.fischblock>h2{font-size:1.6rem}
+
+:root{--up:#17692e;--down:#b3261e}
+@media(prefers-color-scheme:dark){:root:not(.hc){--up:#7fdc97;--down:#ff8a80}}
+.hc{--up:#7fdc97;--down:#ff8a80}
+.boerse-grid{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr))}
+.ware h3{margin:.2rem 0}
+.kurs{font-size:1.5rem;margin:.2rem 0}
+.delta{font-size:1rem;font-weight:700;white-space:nowrap}.delta.up{color:var(--up)}.delta.down{color:var(--down)}
+.ware table{margin:.5rem 0}.ware caption{text-align:left;font-weight:700;padding:.3rem 0}

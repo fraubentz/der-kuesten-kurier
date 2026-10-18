@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="{{ROOT}}style.css">
 </head>
 <body>
-<a class="skip" href="#inhalt" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <header class="masthead">
   <div class="wrap brand">
     <svg class="logo" role="img" aria-labelledby="lt" viewBox="0 0 140 70"><title id="lt">Logo: Fisch vor einem Leuchtturm</title>
@@ -17,9 +17,9 @@
       <circle cx="37" cy="33" r="3.5" fill="#0b2e43"/><rect x="106" y="18" width="10" height="36" fill="#e8b4a8"/><path d="M104 18l7-9 7 9z" fill="currentColor"/>
       <path d="M10 62c8-6 14 6 22 0s14 6 22 0 14 6 22 0 14 6 22 0 14 6 22 0" fill="none" stroke="currentColor" stroke-width="3"/></svg>
     <div>
-      <p class="edition" data-de="Seit heute frisch aus der Druckerei" data-en="Fresh from the press today">Seit heute frisch aus der Druckerei</p>
+      <p class="edition">Seit heute frisch aus der Druckerei</p>
       <h1>Der Küsten-Kurier</h1>
-      <p class="tag" data-de="Die Zeitung für Küste, Kutter und Kaffeetafel" data-en="The paper for coast, cutters and coffee time">Die Zeitung für Küste, Kutter und Kaffeetafel</p>
+      <p class="tag">Die Zeitung für Küste, Kutter und Kaffeetafel</p>
     </div>
   </div>
   <p class="dateline wrap">{{DATUM}}</p>
@@ -28,28 +28,23 @@
 <div class="wrap tools" role="group" aria-label="Anzeigeoptionen">
   <button id="bigger" type="button" aria-label="Schrift größer">A+</button>
   <button id="smaller" type="button" aria-label="Schrift kleiner">A−</button>
-  <button id="contrast" type="button" aria-pressed="false" data-de="Hoher Kontrast" data-en="High contrast">Hoher Kontrast</button>
-  <button id="lang" type="button" lang="en" aria-pressed="false">English (Canada)</button>
-  <a href="{{ROOT}}archive/index.html" data-de="Archiv" data-en="Archive">Archiv</a>
-  <a href="{{ROOT}}briefe.html" data-de="Leserbriefe-Archiv" data-en="Letters archive">Leserbriefe-Archiv</a>
+  <button id="contrast" type="button" aria-pressed="false">Hoher Kontrast</button>
+  <a href="{{ROOT}}archive/index.html">Archiv</a>
+  <a href="{{ROOT}}briefe.html">Leserbriefe-Archiv</a>
 </div>
 <main id="inhalt" class="wrap">
-  <p id="status" class="sr-only" aria-live="polite"></p>
   {{ALERTS}}
-  <div class="banner" role="region" aria-labelledby="w"><h2 id="w" class="sr-only" data-de="Wetter an der Küste" data-en="Coastal weather">Wetter an der Küste</h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12c3-4 5-4 8 0s5 4 8 0 3-2 4-1M2 18c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/></svg> {{WETTER}}</div>
-  <ul class="ticker" aria-label="Preise des Tages">{{TICKER}}</ul>
   {{LEAD}}
+  <div class="banner" role="region" aria-labelledby="w"><h2 id="w" class="sr-only">Wetter an der Küste</h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12c3-4 5-4 8 0s5 4 8 0 3-2 4-1M2 18c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/></svg> {{WETTER}}</div>
+  {{FISCH}}
   <div class="grid">{{NEWS}}</div>
-  <section class="card" aria-labelledby="p"><h2 id="p" data-de="Fisch-, Kaffee- und Teepreise" data-en="Fish, coffee and tea prices">Fisch-, Kaffee- und Teepreise</h2>
-    <div class="scroll"><table><caption class="sr-only">Preise</caption>
-      <thead><tr><th scope="col" data-de="Ware" data-en="Item">Ware</th><th scope="col" data-de="Preis" data-en="Price">Preis</th><th scope="col" data-de="Stand" data-en="As of">Stand</th></tr></thead>
-      <tbody>{{PREISE}}</tbody></table></div><p class="small">{{HINWEIS}}</p></section>
-  <section class="card" aria-labelledby="c"><h2 id="c" data-de="Tier-Webcams der Region" data-en="Animal webcams of the region">Tier-Webcams der Region</h2>{{CAMS}}</section>
+  {{BOERSE}}
+  <section class="card" aria-labelledby="c"><h2 id="c">Tier-Webcams der Region</h2>{{CAMS}}</section>
   {{DUO}}
-  <p class="small erfunden" data-de="Leserbriefe, Hafenklatsch und Logbuch sind frei erfunden." data-en="Letters, harbour gossip and ship's log are entirely invented.">Leserbriefe, Hafenklatsch und Logbuch sind frei erfunden.</p>
-  <section class="card letter" aria-labelledby="l"><h2 id="l" data-de="Leserbrief des Tages" data-en="Letter of the day">Leserbrief des Tages</h2>{{BRIEF}}</section>
+  <p class="small erfunden">Leserbriefe, Hafenklatsch und Logbuch sind frei erfunden.</p>
+  <section class="card letter" aria-labelledby="l"><h2 id="l">Leserbrief des Tages</h2>{{BRIEF}}</section>
 </main>
-<footer><div class="wrap"><p>© <span id="year">{{YEAR}}</span> Der Küsten-Kurier · <span data-de="Gestaltet und gepflegt von Wolfram und Poyi" data-en="Designed and maintained by Wolfram and Poyi">Gestaltet und gepflegt von Wolfram und Poyi</span></p></div></footer>
+<footer><div class="wrap"><p>© <span id="year">{{YEAR}}</span> Der Küsten-Kurier · <span>Gestaltet und gepflegt von Wolfram und Poyi</span></p></div></footer>
 <script src="{{ROOT}}app.js"></script>
 </body>
 </html>

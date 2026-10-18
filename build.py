@@ -23,6 +23,11 @@ ICONS = [
     _i('<path d="M9 21l1.5-12h3L15 21zM10 9l2-5 2 5M6 21h12"/>'),
     _i('<path d="M2 12c3-4 5-4 8 0s5 4 8 0 3-2 4-1M2 18c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/>'),
 ]
+SECTIONS_FISCH = [  # (Titel, Suchanfrage) – Meldungen der letzten 14 Tage
+    ("Sardinen & Konserven", "Sardinen Konserven OR Fischkonserven OR Dosenfisch"),
+    ("Thunfisch, Lachs & Makrele", "Thunfisch OR Lachs OR Makrele OR Hering Fang Preise"),
+    ("Fischerei weltweit", "Fischerei Fangquoten OR Fischbestände OR Fischereiflotte OR Fischer"),
+]
 UA = {"User-Agent": "Mozilla/5.0 (Kuesten-Kurier build)"}
 
 def load(name, default):
@@ -47,9 +52,9 @@ def direct(section, n=3):
             print("Feed-Fehler", f["name"], e)
     return out
 
-def news(query, n=5):
+def news(query, n=5, days=2):
     url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
-        {"q": query + " when:2d", "hl": "de", "gl": "DE", "ceid": "DE:de"})
+        {"q": query + f" when:{days}d", "hl": "de", "gl": "DE", "ceid": "DE:de"})
     try:
         items = ET.fromstring(get(url)).findall(".//item")[:n]
     except Exception as e:
@@ -89,69 +94,80 @@ def weather():
     return txt, alerts, kinds
 
 def fred(sid):
-    """Letzter Monatswert einer FRED-Reihe (IMF-Rohstoffpreise), ohne API-Schlüssel."""
+    """Letzte zwei Monatswerte einer FRED-Reihe (IMF-Rohstoffpreise): (Wert, Jahr, Monat, Vormonatswert)."""
     try:
-        for line in reversed(get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode().strip().splitlines()[1:]):
+        rows = []
+        for line in get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode().strip().splitlines()[1:]:
             d, v = line.split(",")
-            if v not in (".", ""):
-                return float(v), int(d[:4]), int(d[5:7])
+            if v not in (".", ""): rows.append((d, float(v)))
+        (d, v), prev = rows[-1], (rows[-2][1] if len(rows) > 1 else None)
+        return v, int(d[:4]), int(d[5:7]), prev
     except Exception as e:
         print("FRED-Fehler", sid, e)
     return None
 
-def de(x, nd=2): return f"{x:.{nd}f}".replace(".", ",")
+def de(x, nd=2): return f"{x:,.{nd}f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
-def coffee():
-    r = fred("PCOFFOTMUSDM")
-    return (f"{de(r[0], 1)} US-Cent/lb", f"IMF/FRED, Ø {MONTHS[r[2]-1]} {r[1]}") if r else None
+def fx():
+    """Euro-Referenzkurse der EZB (über Frankfurter), Basis US-Dollar."""
+    for url in ("https://api.frankfurter.dev/v1/latest?base=USD&symbols=EUR,GBP,BRL,JPY,CAD,CHF",
+                "https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,BRL,JPY,CAD,CHF"):
+        try: return json.loads(get(url))["rates"]
+        except Exception as e: print("Kurs-Fehler", url, e)
+    return {}
 
-def salmon():
-    r = fred("PSALMUSDM")
-    return (f"{de(r[0])} US-$/kg (Zuchtlachs, Norwegen)", f"IMF/FRED, Ø {MONTHS[r[2]-1]} {r[1]}") if r else None
+STAEDTE = [("Lissabon & Berlin", "EUR", "{} €", 2), ("London", "GBP", "£ {}", 2), ("São Paulo", "BRL", "R$ {}", 2),
+           ("Tokio", "JPY", "¥ {}", 0), ("Vancouver", "CAD", "C$ {}", 2), ("Zürich", "CHF", "CHF {}", 2)]
+WAREN = [  # Name, FRED-Reihe, Kurs->US-$/kg, Anzeige, Portion in g, Portionstext, Yahoo-Symbol (oder None)
+    ("Kaffee (Arabica)", "PCOFFOTMUSDM", lambda c: c / 100 / 0.45359237, lambda v: f"{de(v, 1)} US-Cent/lb", 18, "Die Bohnen in einem Espresso (18 g) kosten etwa", "KC=F"),
+    ("Tee (Schwarztee)", "PTEAUSDM", lambda c: c / 100, lambda v: f"{de(v, 1)} US-Cent/kg", 2, "Der Tee in einer Tasse (2 g) kostet etwa", None),
+]
 
-def sardinen():
-    """Neueste Dosenpreise (EUR) je Marke aus Open Food Facts Prices; Marken ohne Eintrag entfallen."""
-    out = []
-    for b in load("sardinen.json", []):
-        best = None
-        for tag in b["tags"]:
-            try:
-                q = {"brands_tags": tag, "categories_tags": "en:sardines", "fields": "code,product_name", "page_size": 5}
-                prods = json.loads(get("https://world.openfoodfacts.org/api/v2/search?" + urllib.parse.urlencode(q))).get("products", [])
-                for pr in prods:
-                    time.sleep(0.5)
-                    q = {"product_code": pr["code"], "currency": "EUR", "order_by": "-date", "size": 3}
-                    for it in json.loads(get("https://prices.openfoodfacts.org/api/v1/prices?" + urllib.parse.urlencode(q))).get("items", []):
-                        if it.get("price_per") in (None, "UNIT") and it.get("price") and (not best or it["date"] > best[3]):
-                            best = (b["marke"], pr.get("product_name") or "Sardinen", float(it["price"]), it["date"])
-            except Exception as e:
-                print("Sardinen-Fehler", tag, e)
-            if best: break
-        if best: out.append(best)
-    return out
+def yahoo(symbol):
+    """Letzter und vorletzter Tageskurs von Yahoo Finance (inoffizielle Schnittstelle, kann ausfallen): (Kurs, Datum, Vortageskurs)."""
+    try:
+        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}?range=10d&interval=1d"
+        res = json.loads(get(url))["chart"]["result"][0]
+        pts = [(t, c) for t, c in zip(res["timestamp"], res["indicators"]["quote"][0]["close"]) if c is not None]
+        (t, v), prev = pts[-1], (pts[-2][1] if len(pts) > 1 else None)
+        d = dt.datetime.fromtimestamp(t, ZoneInfo("America/New_York"))
+        return v, f"{d.day:02d}.{d.month:02d}.{d.year}", prev
+    except Exception as e:
+        print("Yahoo-Fehler", symbol, e)
+    return None
 
-def price_rows():
-    p = json.loads((ROOT / "data/prices.json").read_text(encoding="utf-8"))
-    c, s = coffee(), salmon()
-    for r in p["items"]:
-        if r["name"].startswith("Kaffee") and c: r["wert"], r["stand"] = c
-        if r["name"] == "Lachs" and s: r["wert"], r["stand"] = s
-    sar = sardinen()
-    if sar:
-        med = statistics.median(x[2] for x in sar)
-        for i, r in enumerate(p["items"]):
-            if r["name"].startswith("Sardinen"):
-                r["wert"], r["stand"] = f"Ø {de(med)} € pro Dose ({len(sar)} Marken)", "Open Food Facts Prices"
-                p["items"][i+1:i+1] = [dict(name=f"– {m}: {n}", wert=f"{de(pr)} €", stand=f"{d[8:]}.{d[5:7]}.{d[:4]}", marke=True) for m, n, pr, d in sar]
-                break
-    rows, tick = "", ""
-    for r in p["items"]:
-        if r.get("marke"): continue
-        tick += f"<li>{ICONS[0]}<span><strong>{html.escape(r['name'].split(' (')[0])}</strong> {html.escape(r['wert']) if r.get('wert') else '–'}</span></li>"
-    for r in p["items"]:
-        w = html.escape(r["wert"]) if r.get("wert") else "<em>derzeit keine Daten</em>"
-        rows += f"<tr><th scope='row'>{html.escape(r['name'])}</th><td>{w}</td><td>{html.escape(r.get('stand') or '–')}</td></tr>"
-    return rows, p.get("hinweis", ""), tick
+def boerse():
+    """Kaffee- und Tee-Börse: Kurs mit Veränderung, Preis pro Kilogramm in sechs Städten, Preis pro Tasse."""
+    rates, out, quellen = fx(), "", []
+    for name, sid, usd_kg, show, gram, ptext, ysym in WAREN:
+        v = prev = label = vergleich = None
+        y = yahoo(ysym) if ysym else None
+        if y:
+            v, prev, label, vergleich = y[0], y[2], f"Letzter Kurs vom {y[1]}", "zum Vortag"
+            quellen.append(f"{name.split(' (')[0]}: Terminbörse (Yahoo Finance)")
+        else:
+            r = fred(sid)
+            if r:
+                v, prev, label, vergleich = r[0], r[3], f"Monatsmittel {MONTHS[r[2]-1]} {r[1]}", "zum Vormonat"
+                quellen.append(f"{name.split(' (')[0]}: Monatsmittel des Internationalen Währungsfonds (über FRED)")
+        if v is None:
+            out += f"<article class='ware'><h3>{html.escape(name)}</h3><p>Derzeit keine Daten.</p></article>"; continue
+        usd = usd_kg(v)
+        delta = ""
+        if prev:
+            pct = (v - prev) / prev * 100
+            up = pct >= 0
+            delta = (f" <span class='delta {'up' if up else 'down'}'><span aria-hidden='true'>{'▲' if up else '▼'}</span>"
+                     f"<span class='sr-only'>{'gestiegen um' if up else 'gefallen um'}</span> {de(abs(pct))} %</span>")
+        rows = "".join(f"<tr><th scope='row'>{c}</th><td>{fmt.format(de(usd * rates[cur], nd))}</td></tr>"
+                       for c, cur, fmt, nd in STAEDTE if cur in rates) or f"<tr><th scope='row'>US-Dollar</th><td>$ {de(usd)}</td></tr>"
+        cup = f"<p>{ptext} <strong>{de(usd * rates['EUR'] * gram / 1000)} €</strong>.</p>" if "EUR" in rates else ""
+        out += (f"<article class='ware'><h3>{html.escape(name)}</h3><p class='kurs'><strong>{show(v)}</strong>{delta}</p>"
+                f"<p class='small'>{label}, Veränderung {vergleich}</p>"
+                f"<table><caption>Pro Kilogramm</caption><thead><tr><th scope='col'>Stadt</th><th scope='col'>Preis</th></tr></thead><tbody>{rows}</tbody></table>{cup}</article>")
+    return (f"<section class='card boerse' aria-labelledby='bo'><h2 id='bo'>Die Kaffee- und Tee-Börse</h2><div class='boerse-grid'>{out}</div>"
+            f"<p class='small'>Großhandelspreise für Rohware ({'; '.join(quellen) or 'Quellen derzeit nicht erreichbar'}), "
+            "umgerechnet mit den Referenzkursen der EZB. Nicht, was Café oder Laden verlangen.</p></section>")
 
 MONTHS = "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split()
 DAYS_DE = "Montag Dienstag Mittwoch Donnerstag Freitag Samstag Sonntag".split()
@@ -208,11 +224,11 @@ def duo():
     out, esc = "", html.escape
     k = tagesauswahl("hafenklatsch.json")
     if k and k.get("titel") and k.get("text"):
-        out += (f"<section class='card klatsch' aria-labelledby='hk'><h2 id='hk' data-de='Hafenklatsch' data-en='Harbour gossip'>Hafenklatsch</h2>"
+        out += (f"<section class='card klatsch' aria-labelledby='hk'><h2 id='hk'>Hafenklatsch</h2>"
                 f"<article><h3>{esc(k['titel'])}</h3><p>{esc(k['text'])}</p></article></section>")
     l = tagesauswahl("logbuch.json")
     if l and l.get("kutter") and l.get("text"):
-        out += (f"<section class='card logbuch' aria-labelledby='lb'><h2 id='lb' data-de='Logbuch' data-en=\"Ship's log\">Logbuch</h2>"
+        out += (f"<section class='card logbuch' aria-labelledby='lb'><h2 id='lb'>Logbuch</h2>"
                 f"<p class='kutter'>{esc(l['kutter'])}</p><p>{esc(l['text'])}</p></section>")
     return f"<div class='duo'>{out}</div>" if out else ""
 
@@ -223,40 +239,48 @@ def cams():
 
 def build():
     tpl = (ROOT / "template.html").read_text(encoding="utf-8")
-    sec, lead = "", ""
+    def card(idx, title, items, icon):
+        li = "".join(f"<li><a href='{html.escape(u)}' rel='noopener'>{html.escape(t)}</a> <span class='src'>{html.escape(s)}, {html.escape(d)}</span></li>"
+                     for t, u, s, d in items) or "<li>Gerade keine Meldungen abrufbar.</li>"
+        return f"<section aria-labelledby='s{idx}' class='card'><h2 id='s{idx}'>{icon}{html.escape(title)}</h2><ul class='news'>{li}</ul></section>"
+    res = {}
     for i, (title, q) in enumerate(SECTIONS):
         cap = 6 if i == 0 else 5
         items = direct(title)
         seen = {x[0] for x in items}
-        items = (items + [x for x in news(q, cap) if x[0] not in seen])[:cap]
-        if i == 0 and items:
-            t, u, s, d = items.pop(0)
+        res[title] = (items + [x for x in news(q, cap) if x[0] not in seen])[:cap]
+    lead = ""
+    for title, _ in SECTIONS:  # Aufmacher: erste echte Meldung in der Reihenfolge Deutschland, Welt, ...
+        if res[title]:
+            t, u, s, d = res[title].pop(0)
             lead = (f"<article class='lead' aria-labelledby='lead-h'><p class='kicker'>Aufmacher · {html.escape(s)}</p>"
                     f"<h2 id='lead-h'><a href='{html.escape(u)}' rel='noopener'>{html.escape(t)}</a></h2><p class='src'>{html.escape(d)}</p></article>")
-        li = "".join(f"<li><a href='{html.escape(u)}' rel='noopener'>{html.escape(t)}</a> <span class='src'>{html.escape(s)}, {html.escape(d)}</span></li>"
-                     for t, u, s, d in items) or "<li>Gerade keine Meldungen abrufbar.</li>"
-        sec += f"<section aria-labelledby='s{i}' class='card'><h2 id='s{i}'>{ICONS[i % 4]}{html.escape(title)}</h2><ul class='news'>{li}</ul></section>"
+            break
+    sec = "".join(card(i, title, res[title], ICONS[i % 4]) for i, (title, _) in enumerate(SECTIONS))
+    fisch = "".join(card(100 + j, title, news(q, 4, 14), ICONS[0]) for j, (title, q) in enumerate(SECTIONS_FISCH))
+    fisch = f"<section class='fischblock' aria-labelledby='fh'><h2 id='fh'>{ICONS[0]}Fisch &amp; Fang aus aller Welt</h2><div class='grid'>{fisch}</div></section>"
     wtxt, alerts, kinds = weather()
     alert_html = "".join(f"<li>{html.escape(a)}</li>" for a in alerts)
-    rows, hint, tick = price_rows()
+    boerse_html = boerse()
     months = "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split()
     days = "Montag Dienstag Mittwoch Donnerstag Freitag Samstag Sonntag".split()
     datum = f"{days[NOW.weekday()]}, {NOW.day}. {months[NOW.month-1]} {NOW.year}, {NOW:%H:%M} Uhr"
     page = {"NEWS": sec, "DUO": duo(), "DATUM": datum, "WETTER": html.escape(wtxt or "Wetterdaten derzeit nicht verfügbar."),
             "ALERTS": f"<div class='alert' role='alert'><h2>Wetterwarnung</h2><ul>{alert_html}</ul></div>" if alerts else "",
-            "PREISE": rows, "TICKER": tick, "LEAD": lead or "<article class='lead'><h2>Heute keine Meldungen abrufbar</h2></article>", "HINWEIS": html.escape(hint), "BRIEF": render_letter(pick_letter(kinds)), "CAMS": cams(), "YEAR": str(NOW.year)}
+            "BOERSE": boerse_html, "LEAD": lead, "FISCH": fisch, "BRIEF": render_letter(pick_letter(kinds)), "CAMS": cams(), "YEAR": str(NOW.year)}
     def render(root):
         s = tpl.replace("{{ROOT}}", root)
         for k, v in page.items(): s = s.replace("{{%s}}" % k, v)
         return s
     OUT.mkdir(exist_ok=True); (OUT / "archive").mkdir(exist_ok=True)
     (OUT / "index.html").write_text(render(""), encoding="utf-8")
-    name = f"{NOW:%Y-%m-%d_%H-%M}.html"
+    name = f"{NOW:%Y-%m-%d}.html"  # eine Archiv-Ausgabe pro Tag: der letzte Lauf des Tages ersetzt die vorige
+    for old in (OUT / "archive").glob(f"{NOW:%Y-%m-%d}_*.html"): old.unlink()
     (OUT / "archive" / name).write_text(render("../"), encoding="utf-8")
     for f in ("style.css", "app.js"):
         (OUT / f).write_bytes((ROOT / f).read_bytes())
     files = sorted((OUT / "archive").glob("2*.html"), reverse=True)
-    li = "".join(f"<li><a href='{f.name}'>Ausgabe vom {f.stem[8:10]}.{f.stem[5:7]}.{f.stem[:4]}, {f.stem[11:13]}:{f.stem[14:]} Uhr</a></li>" for f in files)
+    li = "".join(f"<li><a href='{f.name}'>Ausgabe vom {f.stem[8:10]}.{f.stem[5:7]}.{f.stem[:4]}{(', ' + f.stem[11:13] + ':' + f.stem[14:] + ' Uhr') if len(f.stem) > 10 else ''}</a></li>" for f in files)
     arch = ("<!doctype html><html lang='de'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
             "<title>Archiv – Der Küsten-Kurier</title><link rel='stylesheet' href='../style.css'></head><body><main class='wrap'>"
             f"<p><a href='../index.html'>← Zur aktuellen Ausgabe</a></p><h1>Archiv</h1><ul class='archive'>{li}</ul></main></body></html>")
