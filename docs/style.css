@@ -48,3 +48,10 @@ footer{background:var(--mast);color:var(--mastfg);margin-top:2rem;padding:1.5rem
 .stamp .ico{width:2.4rem;height:2.4rem;margin:0}
 .sig{text-align:right;font-style:italic;margin:.5rem 0}
 .antwort{border-left:5px solid var(--accent);padding:.3rem 1rem;margin:1rem 0 0;background:var(--bg)}
+
+.duo{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));margin:1rem 0}
+.duo .card{margin:0}
+.klatsch{border-top-color:var(--red)}.klatsch h3{margin:.2rem 0}
+.logbuch{font-family:"Courier New",Courier,monospace;border-top-style:dashed}
+.kutter{margin:0;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+.erfunden{text-align:center;margin:1rem 0}
