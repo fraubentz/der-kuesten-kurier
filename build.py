@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Baut den Küsten-Kurier: holt echte Meldungen (Google News RSS), Wetter (Open-Meteo),
 Kaffeepreis (Stooq), rendert docs/index.html und archiviert jede Ausgabe."""
-import json, re, statistics, time, html, datetime as dt, urllib.request, urllib.parse, xml.etree.ElementTree as ET
+import json, statistics, time, html, datetime as dt, urllib.request, urllib.parse, xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -11,7 +11,7 @@ NOW = dt.datetime.now(ZoneInfo("Europe/Berlin"))
 SECTIONS = [  # (Titel, Suchanfrage)
     ("Deutschland", "Deutschland aktuell"), ("Welt", "Weltnachrichten"),
     ("Scharbeutz", "Scharbeutz"), ("Timmendorfer Strand", "Timmendorfer Strand"),
-    ("Katzenfurt", "Katzenfurt OR Ehringshausen"), ("Wetzlar", "Wetzlar"), ("Berlin", "Berlin"),
+    ("Katzenfurt", "Katzenfurt"), ("Wetzlar", "Wetzlar"), ("Berlin", "Berlin"),
     ("Portugal", "Portugal"), ("Kanada", "Kanada"),
 ]
 def _i(body, fill=False):
@@ -39,26 +39,6 @@ def load(name, default):
 
 def get(url):
     return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=20).read()
-
-GN = "hl=de&gl=DE&ceid=DE:de"
-TOP_URL = "https://news.google.com/rss?" + GN
-TOPIC = {"Deutschland": "NATION", "Welt": "WORLD"}  # Google-News-Themen statt Stichwortsuche
-LOKAL = {"Katzenfurt": 30, "Scharbeutz": 7, "Timmendorfer Strand": 7}  # kleine Orte: längerer Zeitraum (Tage)
-JUNK = re.compile(r"livestream|mediathek|sendungen|alle videos|startseite|newsletter|podcast", re.I)
-
-def gfeed(url, n=6):
-    """Google-News-RSS-Feed (Überschrift, Link, Quelle, Datum); Navigations- und Videoseiten werden aussortiert."""
-    try:
-        items = ET.fromstring(get(url)).findall(".//item")
-    except Exception as e:
-        print("News-Fehler", url, e); return []
-    out = []
-    for i in items:
-        title, src = i.findtext("title", ""), i.findtext("source", "")
-        if src and title.endswith(" - " + src): title = title[:-len(src) - 3]
-        if JUNK.search(title): continue
-        out.append((title, i.findtext("link", ""), src, i.findtext("pubDate", "")[:16]))
-    return out[:n]
 
 def direct(section, n=3):
     """Direkte RSS-Feeds aus data/feeds.json (nur Einträge mit enabled=true); zeigt nur Überschrift, Link und Quelle."""
@@ -115,23 +95,16 @@ def weather():
 
 def fred(sid):
     """Letzte zwei Monatswerte einer FRED-Reihe (IMF-Rohstoffpreise): (Wert, Jahr, Monat, Vormonatswert)."""
-    rows = []
     try:
+        rows = []
         for line in get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode().strip().splitlines()[1:]:
             d, v = line.split(",")
             if v not in (".", ""): rows.append((d, float(v)))
+        (d, v), prev = rows[-1], (rows[-2][1] if len(rows) > 1 else None)
+        return v, int(d[:4]), int(d[5:7]), prev
     except Exception as e:
-        print("FRED-Fehler (csv)", sid, e)
-    if not rows:  # Ausweichadresse: Textdatei der Reihe
-        try:
-            for line in get(f"https://fred.stlouisfed.org/data/{sid}.txt").decode().splitlines():
-                a = line.split()
-                if len(a) == 2 and re.match(r"\d{4}-\d{2}-\d{2}$", a[0]) and a[1] != ".": rows.append((a[0], float(a[1])))
-        except Exception as e:
-            print("FRED-Fehler (txt)", sid, e)
-    if not rows: return None
-    (d, v), prev = rows[-1], (rows[-2][1] if len(rows) > 1 else None)
-    return v, int(d[:4]), int(d[5:7]), prev
+        print("FRED-Fehler", sid, e)
+    return None
 
 def de(x, nd=2): return f"{x:,.{nd}f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
@@ -219,10 +192,6 @@ def pick_letter(kinds):
     return led[key]
 
 def render_letter(l):
-    if not l.get("antwort"):  # ältere Archiv-Einträge: Redaktionsantwort aus den aktuellen Briefdateien ergänzen
-        for src in (load("letters.json", []), list(load("wetterbriefe.json", {}).values())):
-            for x in src:
-                if x.get("titel") == l.get("titel") and x.get("antwort"): l = dict(l, antwort=x["antwort"])
     F = load("figuren.json", {}).get(l["autor"], {})
     paras = "".join(f"<p>{html.escape(t)}</p>" for t in l["text"].split("\n"))
     badge = "<p class='badge'>Wetterbrief</p>" if l.get("wetter") else ""
@@ -278,17 +247,12 @@ def build():
     for i, (title, q) in enumerate(SECTIONS):
         cap = 6 if i == 0 else 5
         items = direct(title)
-        if title in TOPIC:
-            items += gfeed(f"https://news.google.com/rss/headlines/section/topic/{TOPIC[title]}?{GN}", cap)
         seen = {x[0] for x in items}
-        res[title] = (items + [x for x in news(q, cap, LOKAL.get(title, 2)) if x[0] not in seen and not JUNK.search(x[0])])[:cap]
+        res[title] = (items + [x for x in news(q, cap) if x[0] not in seen])[:cap]
     lead = ""
-    top = gfeed(TOP_URL, 5)  # Aufmacher: wichtigste Meldung des Tages (Google News Top-Meldungen)
-    if top:
-        for title in res: res[title] = [x for x in res[title] if x[0] != top[0][0]]
-    for title, _ in SECTIONS:  # sonst: erste echte Meldung in der Reihenfolge Deutschland, Welt, ...
-        if top or res[title]:
-            t, u, s, d = top[0] if top else res[title].pop(0)
+    for title, _ in SECTIONS:  # Aufmacher: erste echte Meldung in der Reihenfolge Deutschland, Welt, ...
+        if res[title]:
+            t, u, s, d = res[title].pop(0)
             lead = (f"<article class='lead' aria-labelledby='lead-h'><p class='kicker'>Aufmacher · {html.escape(s)}</p>"
                     f"<h2 id='lead-h'><a href='{html.escape(u)}' rel='noopener'>{html.escape(t)}</a></h2><p class='src'>{html.escape(d)}</p></article>")
             break
