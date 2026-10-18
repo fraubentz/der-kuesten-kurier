@@ -70,3 +70,12 @@ footer{background:var(--mast);color:var(--mastfg);margin-top:2rem;padding:1.5rem
 
 .grid>*,.duo>*,.boerse-grid>*{min-width:0}
 .card,.lead{overflow-wrap:break-word}
+
+.fakten{display:grid;gap:.6rem 1.5rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));margin:0}
+.fakten div{border-left:4px solid var(--accent);padding-left:.8rem}
+.fakten dt{font-weight:700;color:var(--accent)}.fakten dd{margin:0}
+.rezepte{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))}
+.rezepte>*{min-width:0}
+.rezept h3{margin:.2rem 0}.rezept h4{margin:.8rem 0 .2rem}.rezept ul,.rezept ol{margin:.2rem 0;padding-left:1.3rem}
+.anzeigen ul{list-style:none;margin:0;padding:0;display:grid;gap:.8rem}
+.anzeigen li{border:2px dashed var(--line);padding:.6rem .9rem;border-radius:.3rem}

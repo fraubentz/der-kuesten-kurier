@@ -1,0 +1,599 @@
+[
+ {
+  "titel": "Matjes Hausfrauenart",
+  "art": "fisch",
+  "portionen": 4,
+  "zeit": "20 Min. plus 2 Std. Ziehzeit",
+  "zutaten": [
+   "8 Matjesfilets",
+   "2 Äpfel",
+   "2 rote Zwiebeln",
+   "3 Gewürzgurken",
+   "200 g saure Sahne",
+   "100 g Joghurt",
+   "1 EL Zitronensaft",
+   "Salz, Pfeffer, Dill"
+  ],
+  "schritte": [
+   "Zwiebeln in Ringe schneiden, Äpfel und Gurken würfeln.",
+   "Sahne, Joghurt und Zitronensaft verrühren, mit Salz, Pfeffer und Dill würzen.",
+   "Äpfel, Zwiebeln und Gurken unterheben, die Matjesfilets darauflegen und zugedeckt 2 Stunden kühl ziehen lassen.",
+   "Dazu passen Pellkartoffeln."
+  ]
+ },
+ {
+  "titel": "Backfisch aus dem Ofen",
+  "art": "fisch",
+  "portionen": 4,
+  "zeit": "35 Min.",
+  "zutaten": [
+   "600 g Seelachsfilet",
+   "Saft von 1 Zitrone",
+   "100 g Semmelbrösel",
+   "2 EL Senf",
+   "3 EL Öl",
+   "Salz, Pfeffer, Petersilie"
+  ],
+  "schritte": [
+   "Backofen auf 200 °C vorheizen. Fisch säuern, salzen und pfeffern.",
+   "Fisch dünn mit Senf bestreichen, in den mit Öl und Petersilie vermischten Bröseln wenden.",
+   "Auf einem Blech 15 bis 20 Minuten backen, bis die Kruste goldbraun ist."
+  ]
+ },
+ {
+  "titel": "Sardinen auf Röstbrot",
+  "art": "fisch",
+  "portionen": 2,
+  "zeit": "10 Min.",
+  "zutaten": [
+   "1 Dose Sardinen in Öl",
+   "4 Scheiben Brot",
+   "1 Knoblauchzehe",
+   "2 Tomaten",
+   "1 Zitrone",
+   "Olivenöl, Petersilie"
+  ],
+  "schritte": [
+   "Brot rösten und mit der Knoblauchzehe einreiben.",
+   "Tomaten in Scheiben darauflegen, Sardinen abtropfen lassen und obenauf geben.",
+   "Mit Zitronensaft, Olivenöl und Petersilie abschmecken."
+  ]
+ },
+ {
+  "titel": "Rührei mit Räucherlachs",
+  "art": "fisch",
+  "portionen": 2,
+  "zeit": "10 Min.",
+  "zutaten": [
+   "4 Eier",
+   "100 g Räucherlachs",
+   "1 EL Butter",
+   "Schnittlauch",
+   "Salz, Pfeffer",
+   "2 Scheiben Brot"
+  ],
+  "schritte": [
+   "Eier verquirlen, salzen und pfeffern.",
+   "In der Butter bei mittlerer Hitze unter Rühren langsam stocken lassen.",
+   "Lachs in Streifen schneiden, kurz vor dem Servieren unterheben und mit Schnittlauch bestreuen."
+  ]
+ },
+ {
+  "titel": "Heringssalat mit Roter Bete",
+  "art": "fisch",
+  "portionen": 4,
+  "zeit": "25 Min. plus 1 Std. Kühlzeit",
+  "zutaten": [
+   "4 Heringsfilets (Matjes oder Bismarck)",
+   "3 gekochte Kartoffeln",
+   "2 gekochte Rote Beten",
+   "1 Apfel",
+   "1 Gewürzgurke",
+   "150 g Joghurt",
+   "2 EL Mayonnaise",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Alles in kleine Würfel schneiden.",
+   "Joghurt und Mayonnaise verrühren, mit Salz und Pfeffer würzen.",
+   "Zutaten vorsichtig vermengen und mindestens 1 Stunde kühl stellen."
+  ]
+ },
+ {
+  "titel": "Fischsuppe mit Kartoffeln",
+  "art": "fisch",
+  "portionen": 4,
+  "zeit": "40 Min.",
+  "zutaten": [
+   "400 g Seelachsfilet",
+   "400 g Kartoffeln",
+   "2 Möhren",
+   "1 Stange Lauch",
+   "1 l Gemüsebrühe",
+   "100 ml Sahne",
+   "Dill, Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Gemüse klein schneiden und in der Brühe 15 Minuten garen.",
+   "Fisch in Stücke schneiden, 5 Minuten leise mitziehen lassen.",
+   "Sahne einrühren, mit Salz, Pfeffer und Dill abschmecken."
+  ]
+ },
+ {
+  "titel": "Thunfisch-Nudelsalat",
+  "art": "fisch",
+  "portionen": 4,
+  "zeit": "25 Min.",
+  "zutaten": [
+   "250 g Nudeln",
+   "1 Dose Thunfisch im eigenen Saft",
+   "1 kleine Dose Mais",
+   "1 Paprika",
+   "1 Gurke",
+   "1 rote Zwiebel",
+   "150 g Joghurt",
+   "2 EL Essig",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Nudeln kochen und abkühlen lassen.",
+   "Gemüse klein schneiden, Thunfisch abtropfen lassen.",
+   "Joghurt und Essig verrühren, alles mischen und 30 Minuten ziehen lassen."
+  ]
+ },
+ {
+  "titel": "Lachs mit Dillsoße",
+  "art": "fisch",
+  "portionen": 2,
+  "zeit": "25 Min.",
+  "zutaten": [
+   "2 Lachsfilets",
+   "1 EL Öl",
+   "100 g Crème fraîche",
+   "1 TL Senf",
+   "1 EL Zitronensaft",
+   "2 EL Dill",
+   "Salz, Pfeffer",
+   "Salzkartoffeln"
+  ],
+  "schritte": [
+   "Lachs salzen und pfeffern, in Öl pro Seite 3 bis 4 Minuten braten.",
+   "Crème fraîche, Senf, Zitronensaft und Dill verrühren.",
+   "Mit Salzkartoffeln und der Soße servieren."
+  ]
+ },
+ {
+  "titel": "Fischfrikadellen",
+  "art": "fisch",
+  "portionen": 4,
+  "zeit": "30 Min.",
+  "zutaten": [
+   "400 g Fischfilet (Kabeljau oder Seelachs)",
+   "1 altbackenes Brötchen",
+   "1 Ei",
+   "1 Zwiebel",
+   "Petersilie",
+   "Salz, Pfeffer",
+   "Öl zum Braten"
+  ],
+  "schritte": [
+   "Brötchen einweichen und ausdrücken. Fisch fein hacken, Zwiebel würfeln.",
+   "Alles mit Ei und Gewürzen vermengen, zu Frikadellen formen.",
+   "In Öl pro Seite 4 Minuten braten."
+  ]
+ },
+ {
+  "titel": "Rotbarsch auf Ofengemüse",
+  "art": "fisch",
+  "portionen": 4,
+  "zeit": "35 Min.",
+  "zutaten": [
+   "4 Rotbarschfilets",
+   "1 Fenchelknolle",
+   "3 Möhren",
+   "1 Zitrone",
+   "3 EL Olivenöl",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Backofen auf 180 °C vorheizen. Fenchel und Möhren in Scheiben auf ein Blech legen, mit Öl, Salz und Pfeffer mischen.",
+   "15 Minuten vorgaren, dann den gesalzenen Fisch darauflegen.",
+   "Weitere 15 Minuten garen, mit Zitrone servieren."
+  ]
+ },
+ {
+  "titel": "Makrele mit Senfkruste",
+  "art": "fisch",
+  "portionen": 2,
+  "zeit": "25 Min.",
+  "zutaten": [
+   "2 frische Makrelenfilets",
+   "2 EL Senf",
+   "3 EL Semmelbrösel",
+   "1 EL Butter",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Backofen auf 200 °C vorheizen. Filets salzen, pfeffern und mit Senf bestreichen.",
+   "Mit Bröseln bestreuen, Butterflöckchen darauf verteilen.",
+   "12 bis 15 Minuten backen."
+  ]
+ },
+ {
+  "titel": "Scholle nach Finkenwerder Art",
+  "art": "fisch",
+  "portionen": 2,
+  "zeit": "30 Min.",
+  "zutaten": [
+   "2 Schollen, küchenfertig",
+   "2 EL Mehl",
+   "2 EL Butter",
+   "50 g Speckwürfel",
+   "1 Zwiebel",
+   "Salz, Pfeffer",
+   "Salzkartoffeln"
+  ],
+  "schritte": [
+   "Schollen salzen, pfeffern und im Mehl wenden.",
+   "In Butter pro Seite 4 bis 5 Minuten braten.",
+   "Speck und Zwiebelwürfel in einer zweiten Pfanne knusprig braten, über den Fisch geben."
+  ]
+ },
+ {
+  "titel": "Krabbenbrot mit Ei",
+  "art": "fisch",
+  "portionen": 2,
+  "zeit": "10 Min.",
+  "zutaten": [
+   "150 g Nordseekrabben",
+   "2 Scheiben Schwarzbrot",
+   "2 hartgekochte Eier",
+   "Butter",
+   "Dill",
+   "Zitronensaft"
+  ],
+  "schritte": [
+   "Brot buttern. Eier in Scheiben schneiden und belegen.",
+   "Krabben mit etwas Zitronensaft beträufeln und daraufgeben.",
+   "Mit Dill bestreuen."
+  ]
+ },
+ {
+  "titel": "Kartoffel-Fischauflauf",
+  "art": "fisch",
+  "portionen": 4,
+  "zeit": "60 Min.",
+  "zutaten": [
+   "600 g Kartoffeln",
+   "500 g Fischfilet",
+   "200 ml Sahne",
+   "2 Eier",
+   "1 Zwiebel",
+   "Salz, Pfeffer, Dill"
+  ],
+  "schritte": [
+   "Backofen auf 180 °C vorheizen. Kartoffeln in dünne Scheiben schneiden, mit Zwiebelringen in eine Form schichten.",
+   "Fisch in Stücken darauflegen. Sahne mit Eiern, Salz, Pfeffer und Dill verquirlen und darübergießen.",
+   "40 Minuten backen."
+  ]
+ },
+ {
+  "titel": "Senfeier mit Salzkartoffeln",
+  "art": "vegetarisch",
+  "portionen": 4,
+  "zeit": "30 Min.",
+  "zutaten": [
+   "8 Eier",
+   "600 g Kartoffeln",
+   "30 g Butter",
+   "30 g Mehl",
+   "300 ml Milch",
+   "3 EL Senf",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Kartoffeln kochen, Eier 8 Minuten hart kochen.",
+   "Butter schmelzen, Mehl einrühren, Milch zugießen und unter Rühren aufkochen.",
+   "Senf, Salz und Pfeffer einrühren, die Eier halbieren und in der Soße erwärmen."
+  ]
+ },
+ {
+  "titel": "Kartoffelpuffer mit Apfelmus",
+  "art": "vegetarisch",
+  "portionen": 4,
+  "zeit": "35 Min.",
+  "zutaten": [
+   "1 kg Kartoffeln",
+   "1 Zwiebel",
+   "2 Eier",
+   "3 EL Mehl",
+   "Salz",
+   "Öl zum Braten",
+   "Apfelmus"
+  ],
+  "schritte": [
+   "Kartoffeln und Zwiebel fein reiben, gut ausdrücken.",
+   "Mit Eiern, Mehl und Salz vermengen.",
+   "Portionsweise in heißem Öl von beiden Seiten goldbraun braten, mit Apfelmus servieren."
+  ]
+ },
+ {
+  "titel": "Pilzrahm-Nudeln",
+  "art": "vegetarisch",
+  "portionen": 4,
+  "zeit": "25 Min.",
+  "zutaten": [
+   "400 g Nudeln",
+   "400 g Champignons",
+   "1 Zwiebel",
+   "200 ml Sahne",
+   "2 EL Butter",
+   "Petersilie",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Nudeln kochen. Pilze in Scheiben schneiden, Zwiebel würfeln.",
+   "Beides in Butter kräftig anbraten, Sahne zugießen und kurz einkochen.",
+   "Mit Salz, Pfeffer und Petersilie würzen, mit den Nudeln mischen."
+  ]
+ },
+ {
+  "titel": "Kürbissuppe",
+  "art": "vegetarisch",
+  "portionen": 4,
+  "zeit": "35 Min.",
+  "zutaten": [
+   "1 Hokkaido-Kürbis",
+   "1 Zwiebel",
+   "1 EL Butter",
+   "700 ml Gemüsebrühe",
+   "100 ml Sahne",
+   "Salz, Pfeffer, Muskat"
+  ],
+  "schritte": [
+   "Kürbis (Schale kann mitgegessen werden) und Zwiebel würfeln, in Butter anschwitzen.",
+   "Brühe zugießen, 20 Minuten weich kochen und pürieren.",
+   "Sahne einrühren und mit Salz, Pfeffer und Muskat abschmecken."
+  ]
+ },
+ {
+  "titel": "Quarkkeulchen",
+  "art": "vegetarisch",
+  "portionen": 4,
+  "zeit": "40 Min.",
+  "zutaten": [
+   "500 g gekochte Kartoffeln",
+   "250 g Quark",
+   "1 Ei",
+   "3 EL Mehl",
+   "2 EL Zucker",
+   "1 TL Zimt",
+   "Butter zum Braten"
+  ],
+  "schritte": [
+   "Kartoffeln zerstampfen, mit Quark, Ei, Mehl und Zucker verkneten.",
+   "Kleine Fladen formen.",
+   "In Butter von beiden Seiten goldbraun braten, mit Zimt und Zucker bestreuen."
+  ]
+ },
+ {
+  "titel": "Gemüsequiche",
+  "art": "vegetarisch",
+  "portionen": 6,
+  "zeit": "60 Min.",
+  "zutaten": [
+   "1 Rolle Mürbeteig",
+   "1 Stange Lauch",
+   "1 Paprika",
+   "3 Eier",
+   "200 ml Sahne",
+   "100 g geriebener Käse",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Backofen auf 180 °C vorheizen. Teig in eine Form legen und mehrmals einstechen.",
+   "Gemüse klein schneiden, auf dem Teig verteilen.",
+   "Eier, Sahne, Käse, Salz und Pfeffer verquirlen, darübergießen und 35 Minuten backen."
+  ]
+ },
+ {
+  "titel": "Ofenkartoffeln mit Kräuterquark",
+  "art": "vegetarisch",
+  "portionen": 4,
+  "zeit": "60 Min.",
+  "zutaten": [
+   "8 mittelgroße Kartoffeln",
+   "2 EL Öl",
+   "400 g Quark",
+   "3 EL Milch",
+   "Schnittlauch, Petersilie",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Backofen auf 200 °C vorheizen. Kartoffeln waschen, einritzen und mit Öl und Salz bestreichen.",
+   "45 bis 50 Minuten backen.",
+   "Quark mit Milch und Kräutern verrühren und dazu servieren."
+  ]
+ },
+ {
+  "titel": "Rote-Bete-Salat mit Ziegenkäse",
+  "art": "vegetarisch",
+  "portionen": 4,
+  "zeit": "20 Min.",
+  "zutaten": [
+   "500 g gekochte Rote Bete",
+   "150 g Ziegenfrischkäse",
+   "2 EL Essig",
+   "3 EL Öl",
+   "1 TL Senf",
+   "Salz, Pfeffer",
+   "Walnüsse"
+  ],
+  "schritte": [
+   "Rote Bete in Scheiben schneiden.",
+   "Essig, Öl, Senf, Salz und Pfeffer zu einer Soße verrühren.",
+   "Rote Bete damit mischen, Käse und Walnüsse darüber verteilen."
+  ]
+ },
+ {
+  "titel": "Linsensuppe",
+  "art": "vegan",
+  "portionen": 4,
+  "zeit": "45 Min.",
+  "zutaten": [
+   "250 g Tellerlinsen",
+   "2 Möhren",
+   "1 Stück Sellerie",
+   "1 Zwiebel",
+   "1,2 l Gemüsebrühe",
+   "2 EL Essig",
+   "Majoran, Salz, Pfeffer",
+   "1 EL Öl"
+  ],
+  "schritte": [
+   "Gemüse würfeln und in Öl anschwitzen.",
+   "Linsen und Brühe zugeben, 30 Minuten garen.",
+   "Mit Essig, Majoran, Salz und Pfeffer abschmecken."
+  ]
+ },
+ {
+  "titel": "Möhren-Ingwer-Suppe",
+  "art": "vegan",
+  "portionen": 4,
+  "zeit": "30 Min.",
+  "zutaten": [
+   "600 g Möhren",
+   "1 Zwiebel",
+   "1 Stück Ingwer (3 cm)",
+   "1 EL Öl",
+   "700 ml Gemüsebrühe",
+   "200 ml Kokosmilch",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Möhren, Zwiebel und Ingwer klein schneiden, in Öl anschwitzen.",
+   "Brühe zugießen, 20 Minuten kochen, pürieren.",
+   "Kokosmilch einrühren, mit Salz und Pfeffer abschmecken."
+  ]
+ },
+ {
+  "titel": "Bratkartoffeln mit Gurkensalat",
+  "art": "vegan",
+  "portionen": 4,
+  "zeit": "40 Min.",
+  "zutaten": [
+   "800 g gekochte Kartoffeln vom Vortag",
+   "2 Zwiebeln",
+   "3 EL Pflanzenöl",
+   "Salz, Pfeffer, Majoran",
+   "1 Gurke",
+   "2 EL Essig",
+   "1 EL Öl",
+   "Dill"
+  ],
+  "schritte": [
+   "Kartoffeln in Scheiben schneiden und in Öl 15 Minuten braten.",
+   "Zwiebeln zugeben, weitere 5 Minuten braten, würzen.",
+   "Gurke hobeln, mit Essig, Öl, Salz und Dill mischen."
+  ]
+ },
+ {
+  "titel": "Spaghetti aglio e olio",
+  "art": "vegan",
+  "portionen": 2,
+  "zeit": "20 Min.",
+  "zutaten": [
+   "250 g Spaghetti",
+   "4 Knoblauchzehen",
+   "5 EL Olivenöl",
+   "1 getrocknete Chili",
+   "Petersilie",
+   "Salz"
+  ],
+  "schritte": [
+   "Spaghetti in Salzwasser bissfest kochen, etwas Kochwasser aufheben.",
+   "Knoblauch in Scheiben im Öl bei kleiner Hitze goldgelb werden lassen, Chili zugeben.",
+   "Nudeln mit einem Schuss Kochwasser und Petersilie darin schwenken."
+  ]
+ },
+ {
+  "titel": "Gemüsecurry mit Reis",
+  "art": "vegan",
+  "portionen": 4,
+  "zeit": "35 Min.",
+  "zutaten": [
+   "300 g Reis",
+   "1 Zwiebel",
+   "2 Möhren",
+   "1 Paprika",
+   "200 g Blumenkohl",
+   "2 EL Currypaste (ohne Fischsauce, auf der Packung prüfen)",
+   "400 ml Kokosmilch",
+   "1 EL Öl",
+   "Salz"
+  ],
+  "schritte": [
+   "Reis nach Packungsanleitung kochen.",
+   "Zwiebel und Gemüse in Öl anbraten, Currypaste kurz mitrösten.",
+   "Kokosmilch zugießen, 15 Minuten köcheln lassen, salzen und zum Reis servieren."
+  ]
+ },
+ {
+  "titel": "Kartoffelsuppe mit Majoran",
+  "art": "vegan",
+  "portionen": 4,
+  "zeit": "35 Min.",
+  "zutaten": [
+   "800 g Kartoffeln",
+   "2 Möhren",
+   "1 Zwiebel",
+   "1 l Gemüsebrühe",
+   "1 EL Öl",
+   "Majoran, Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Gemüse würfeln und in Öl anschwitzen.",
+   "Brühe zugießen, 20 Minuten garen.",
+   "Einen Teil der Suppe pürieren, mit Majoran, Salz und Pfeffer abschmecken."
+  ]
+ },
+ {
+  "titel": "Ofengemüse mit Rosmarin",
+  "art": "vegan",
+  "portionen": 4,
+  "zeit": "50 Min.",
+  "zutaten": [
+   "600 g Kartoffeln",
+   "2 Möhren",
+   "1 Zucchini",
+   "2 rote Zwiebeln",
+   "4 EL Olivenöl",
+   "Rosmarin",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Backofen auf 200 °C vorheizen. Gemüse in grobe Stücke schneiden.",
+   "Mit Öl, Rosmarin, Salz und Pfeffer mischen und auf einem Blech verteilen.",
+   "35 bis 40 Minuten backen, einmal wenden."
+  ]
+ },
+ {
+  "titel": "Pilzpfanne mit Petersilienkartoffeln",
+  "art": "vegan",
+  "portionen": 4,
+  "zeit": "35 Min.",
+  "zutaten": [
+   "600 g Kartoffeln",
+   "500 g gemischte Pilze",
+   "1 Zwiebel",
+   "3 EL Pflanzenöl",
+   "1 Bund Petersilie",
+   "Salz, Pfeffer"
+  ],
+  "schritte": [
+   "Kartoffeln kochen und mit gehackter Petersilie schwenken.",
+   "Pilze und Zwiebel in Öl kräftig anbraten.",
+   "Mit Salz und Pfeffer würzen und zu den Kartoffeln servieren."
+  ]
+ }
+]

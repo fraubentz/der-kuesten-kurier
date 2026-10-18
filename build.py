@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Baut den Küsten-Kurier: holt echte Meldungen (Google News RSS), Wetter (Open-Meteo),
 Kaffeepreis (Stooq), rendert docs/index.html und archiviert jede Ausgabe."""
-import json, re, statistics, time, html, datetime as dt, urllib.request, urllib.parse, xml.etree.ElementTree as ET
+import json, math, re, statistics, time, html, datetime as dt, urllib.request, urllib.parse, xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -281,6 +281,76 @@ def cams():
     return ("<ul>" + "".join(f"<li><a href='{html.escape(c['url'])}' rel='noopener'>{html.escape(c['name'])}</a></li>" for c in C) + "</ul>"
             "<p class='small'>Die Links führen zu den Webcam-Seiten von Windy und Tourispo. Die Bilder gehören den jeweiligen Betreibern.</p>")
 
+BEAUFORT = [(1, "Windstille"), (5, "leiser Zug"), (11, "leichte Brise"), (19, "schwache Brise"), (28, "mäßige Brise"), (38, "frische Brise"),
+            (49, "starker Wind"), (61, "steifer Wind"), (74, "stürmischer Wind"), (88, "Sturm"), (102, "schwerer Sturm"), (117, "orkanartiger Sturm")]
+PHASEN = ["Neumond", "zunehmende Sichel", "erstes Viertel", "zunehmender Mond", "Vollmond", "abnehmender Mond", "letztes Viertel", "abnehmende Sichel"]
+HIMMEL = ["Nord", "Nordost", "Ost", "Südost", "Süd", "Südwest", "West", "Nordwest"]
+
+def beaufort(kmh):
+    for stufe, (grenze, name) in enumerate(BEAUFORT):
+        if kmh < grenze: return stufe, name
+    return 12, "Orkan"
+
+def mondphase(jetzt):
+    """Mondphase und beleuchteter Anteil (%), gerechnet ab dem Neumond vom 6.1.2000, 18:14 UTC."""
+    ref = dt.datetime(2000, 1, 6, 18, 14, tzinfo=dt.timezone.utc)
+    f = (((jetzt - ref).total_seconds() / 86400) % 29.530588853) / 29.530588853
+    return PHASEN[int(f * 8 + 0.5) % 8], (1 - math.cos(2 * math.pi * f)) / 2 * 100
+
+def seewetter_html():
+    """Seewetter, Sonne und Mond für die Lübecker Bucht (Open-Meteo, Modellwerte)."""
+    fakten = []
+    try:
+        d = json.loads(get("https://api.open-meteo.com/v1/forecast?latitude=54.05&longitude=10.75&current=wind_speed_10m,wind_direction_10m"
+                           "&daily=sunrise,sunset&timezone=Europe%2FBerlin&forecast_days=1"))
+        kmh, grad = d["current"]["wind_speed_10m"], d["current"]["wind_direction_10m"]
+        stufe, name = beaufort(kmh)
+        fakten.append(("Wind", f"Stärke {stufe} ({name}), aus {HIMMEL[round(grad / 45) % 8]}, {de(kmh, 0)} km/h"))
+        fakten.append(("Sonne", f"Aufgang {d['daily']['sunrise'][0][11:16]} Uhr, Untergang {d['daily']['sunset'][0][11:16]} Uhr"))
+    except Exception as e:
+        print("Seewetter-Fehler (Wind)", e)
+    try:
+        m = json.loads(get("https://marine-api.open-meteo.com/v1/marine?latitude=54.2&longitude=10.9&current=wave_height,sea_surface_temperature&timezone=Europe%2FBerlin"))["current"]
+        if m.get("wave_height") is not None: fakten.append(("Wellenhöhe", f"{de(m['wave_height'], 1)} m"))
+        if m.get("sea_surface_temperature") is not None: fakten.append(("Wassertemperatur", f"{de(m['sea_surface_temperature'], 0)} °C"))
+    except Exception as e:
+        print("Seewetter-Fehler (See)", e)
+    name, hell = mondphase(dt.datetime.now(dt.timezone.utc))
+    fakten.append(("Mond", f"{name}, {de(hell, 0)} % beleuchtet"))
+    dl = "".join(f"<div><dt>{k}</dt><dd>{html.escape(v)}</dd></div>" for k, v in fakten)
+    return (f"<section class='card see' aria-labelledby='se'><h2 id='se'>{ICONS[3]}Seewetter, Sonne und Mond</h2><dl class='fakten'>{dl}</dl>"
+            "<p class='small'>Modellwerte für die Lübecker Bucht (Wetterdaten: Open-Meteo.com), keine amtlichen Messungen. "
+            "Für die Schifffahrt gilt der Seewetterbericht des Deutschen Wetterdienstes.</p></section>")
+
+def rezept_html(r, label):
+    art = {"fisch": "mit Fisch", "vegetarisch": "vegetarisch", "vegan": "vegan"}.get(r["art"], r["art"])
+    zut = "".join(f"<li>{html.escape(z)}</li>" for z in r["zutaten"])
+    sch = "".join(f"<li>{html.escape(s)}</li>" for s in r["schritte"])
+    return (f"<article class='rezept'><p class='kicker'>{label if r['art'] == 'fisch' else label + ' · ' + art}</p><h3>{html.escape(r['titel'])}</h3>"
+            f"<p class='small'>{r['portionen']} Portionen · {html.escape(r['zeit'])}</p>"
+            f"<h4>Zutaten</h4><ul>{zut}</ul><h4>Zubereitung</h4><ol>{sch}</ol></article>")
+
+def rezepte():
+    """Rezept des Tages: ein Fischgericht und ein Gericht ohne Fisch und Fleisch (vegetarisch oder vegan)."""
+    R = load("rezepte.json", [])
+    tag = (NOW.date() - dt.date(2026, 10, 17)).days
+    fisch = [r for r in R if r.get("art") == "fisch"]
+    veg = [r for r in R if r.get("art") == "vegetarisch"]
+    vegan = [r for r in R if r.get("art") == "vegan"]
+    ohne = [x for paar in zip(veg, vegan) for x in paar] + veg[len(vegan):] + vegan[len(veg):]  # abwechselnd vegetarisch und vegan
+    teile = ""
+    if fisch: teile += rezept_html(fisch[tag % len(fisch)], "Mit Fisch")
+    if ohne: teile += rezept_html(ohne[tag % len(ohne)], "Ohne Fisch und Fleisch")
+    return (f"<section class='card' aria-labelledby='rz'><h2 id='rz'>{ICONS[0]}Rezepte des Tages</h2><div class='rezepte'>{teile}</div></section>") if teile else ""
+
+def anzeigen():
+    """Kleinanzeigen: drei erfundene Anzeigen pro Tag."""
+    A = load("kleinanzeigen.json", [])
+    if not A: return ""
+    tag = (NOW.date() - dt.date(2026, 10, 17)).days
+    li = "".join(f"<li><strong>{html.escape(a['rubrik'])}:</strong> {html.escape(a['text'])}</li>" for a in (A[(tag * 3 + k) % len(A)] for k in range(3)))
+    return f"<section class='card anzeigen' aria-labelledby='ka'><h2 id='ka'>Kleinanzeigen</h2><ul>{li}</ul></section>"
+
 def build():
     tpl = (ROOT / "template.html").read_text(encoding="utf-8")
     def card(idx, title, items, icon):
@@ -316,7 +386,7 @@ def build():
     datum = f"{days[NOW.weekday()]}, {NOW.day}. {months[NOW.month-1]} {NOW.year}, {NOW:%H:%M} Uhr"
     page = {"NEWS": sec, "DUO": duo(), "DATUM": datum, "WETTER": html.escape(wtxt or "Wetterdaten derzeit nicht verfügbar."),
             "ALERTS": f"<div class='alert' role='alert'><h2>Wetterwarnung</h2><ul>{alert_html}</ul></div>" if alerts else "",
-            "BOERSE": boerse_html, "LEAD": lead, "FISCH": fisch, "BRIEF": render_letter(pick_letter(kinds)), "CAMS": cams(), "YEAR": str(NOW.year), "BUILD": NOW.strftime("%Y%m%d%H%M")}
+            "BOERSE": boerse_html, "SEE": seewetter_html(), "REZEPT": rezepte(), "ANZEIGEN": anzeigen(), "LEAD": lead, "FISCH": fisch, "BRIEF": render_letter(pick_letter(kinds)), "CAMS": cams(), "YEAR": str(NOW.year), "BUILD": NOW.strftime("%Y%m%d%H%M")}
     def render(root):
         s = tpl.replace("{{ROOT}}", root)
         for k, v in page.items(): s = s.replace("{{%s}}" % k, v)
