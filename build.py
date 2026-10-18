@@ -46,6 +46,11 @@ TOPIC = {"Deutschland": "NATION", "Welt": "WORLD"}  # Google-News-Themen statt S
 LOKAL = {"Katzenfurt": 30, "Scharbeutz": 7, "Timmendorfer Strand": 7}  # kleine Orte: längerer Zeitraum (Tage)
 JUNK = re.compile(r"livestream|mediathek|sendungen|alle videos|startseite|newsletter|podcast", re.I)
 
+def clean(title, src):
+    """Quellenzusatz am Titelende entfernen (' - Quelle' und ' - domain.de')."""
+    if src and title.endswith(" - " + src): title = title[:-len(src) - 3]
+    return re.sub(r"\s+-\s+[\w.\-]+\.(?:de|com|org|net|ch|at|eu)$", "", title).strip()
+
 def gfeed(url, n=6):
     """Google-News-RSS-Feed (Überschrift, Link, Quelle, Datum); Navigations- und Videoseiten werden aussortiert."""
     try:
@@ -55,7 +60,7 @@ def gfeed(url, n=6):
     out = []
     for i in items:
         title, src = i.findtext("title", ""), i.findtext("source", "")
-        if src and title.endswith(" - " + src): title = title[:-len(src) - 3]
+        title = clean(title, src)
         if JUNK.search(title): continue
         out.append((title, i.findtext("link", ""), src, i.findtext("pubDate", "")[:16]))
     return out[:n]
@@ -73,18 +78,26 @@ def direct(section, n=3):
     return out
 
 def news(query, n=5, days=2):
-    url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
-        {"q": query + f" when:{days}d", "hl": "de", "gl": "DE", "ceid": "DE:de"})
-    try:
-        items = ET.fromstring(get(url)).findall(".//item")[:n]
-    except Exception as e:
-        print("News-Fehler", query, e); return []
+    """Google-News-Suche; bei Fehler ein zweiter Versuch, bei leerem Ergebnis kleiner Orte ein größerer Zeitraum (90 Tage)."""
     out = []
-    for i in items:
-        title = i.findtext("title", "")
-        src = i.findtext("source", "")
-        if src and title.endswith(" - " + src): title = title[:-len(src) - 3]
-        out.append((title, i.findtext("link", ""), src, i.findtext("pubDate", "")[:16]))
+    for d in dict.fromkeys([days, 90] if days >= 7 else [days]):
+        url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
+            {"q": query + f" when:{d}d", "hl": "de", "gl": "DE", "ceid": "DE:de"})
+        items = []
+        for versuch in (1, 2):
+            try:
+                time.sleep(0.4)  # Google News nicht mit schnellen Anfragen überlasten
+                items = ET.fromstring(get(url)).findall(".//item")[:n]
+                break
+            except Exception as e:
+                print("News-Fehler", query, f"{d} Tage, Versuch {versuch}", e); time.sleep(2)
+        out = []
+        for i in items:
+            title = i.findtext("title", "")
+            src = i.findtext("source", "")
+            title = clean(title, src)
+            out.append((title, i.findtext("link", ""), src, i.findtext("pubDate", "")[:16]))
+        if out: break
     return out
 
 def weather():
