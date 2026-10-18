@@ -10,7 +10,8 @@
   "titel": "Kaffee ist keine Verhandlungssache",
   "autor": "Frau Brunhilde Kowalski",
   "ort": "Katzenfurt",
-  "text": "Der Kaffee beim Bäcker kostet wieder mehr, und die Tasse wird kleiner. Früher gab es dafür noch einen Keks. Wo soll das enden?"
+  "text": "Der Kaffee beim Bäcker kostet wieder mehr, und die Tasse wird kleiner. Früher gab es dafür noch einen Keks. Wo soll das enden?",
+  "antwort": "Die Redaktion hat nachgerechnet: Der Keks war früher auch kleiner."
  },
  {
   "titel": "Strandkörbe gehören nummeriert",
@@ -37,7 +38,8 @@
   "titel": "Lob für die Fähre",
   "autor": "Inge Möller",
   "ort": "Timmendorfer Strand",
-  "text": "Die Besatzung hat meinen Rollator gleich zweimal über die Rampe getragen. Dafür ein herzliches Dankeschön. Das ist Küstencharme."
+  "text": "Die Besatzung hat meinen Rollator gleich zweimal über die Rampe getragen. Dafür ein herzliches Dankeschön. Das ist Küstencharme.",
+  "antwort": "Die Redaktion richtet den Dank aus. Der Rollator fährt künftig kostenlos mit."
  },
  {
   "titel": "Fahrräder auf der Promenade",
@@ -50,7 +52,8 @@
   "titel": "Berliner Verhältnisse",
   "autor": "Dieter Plönske",
   "ort": "Berlin",
-  "text": "Der Bus kam pünktlich. Ich habe ein Foto gemacht, falls mir keiner glaubt. Bitte drucken Sie es, damit es Zeugen gibt."
+  "text": "Der Bus kam pünktlich. Ich habe ein Foto gemacht, falls mir keiner glaubt. Bitte drucken Sie es, damit es Zeugen gibt.",
+  "antwort": "Das Foto ist eingegangen. Die Redaktion hat es gerahmt und bittet um weitere Beweise."
  },
  {
   "titel": "Teezeit ist heilig",
@@ -70,7 +73,8 @@
   "titel": "Sardinen sind kein Katzenfutter",
   "autor": "Käpt'n Jörn Thießen",
   "ort": "Scharbeutz",
-  "text": "Ein Gast fragte, ob Dosensardinen auch für Menschen sind. Ja! Mit Zitrone und Brot, besser als jedes Menü in der Stadt."
+  "text": "Ein Gast fragte, ob Dosensardinen auch für Menschen sind. Ja! Mit Zitrone und Brot, besser als jedes Menü in der Stadt.",
+  "antwort": "Die Redaktion bestätigt: Katzen sind auch nicht begeistert, aber höflich."
  },
  {
   "titel": "Zu viele Touristen im Sommer",
@@ -83,7 +87,8 @@
   "titel": "Dank an die Rettungsschwimmer",
   "autor": "Inge Möller",
   "ort": "Timmendorfer Strand",
-  "text": "Die jungen Leute am Strand passen auf alle auf, sogar auf Opas, die den Badeanzug falsch herum anziehen. Danke!"
+  "text": "Die jungen Leute am Strand passen auf alle auf, sogar auf Opas, die den Badeanzug falsch herum anziehen. Danke!",
+  "antwort": "Die Rettungsschwimmer haben den Brief gelesen und winken zurück."
  },
  {
   "titel": "Hundeverbot am Strand?",
@@ -103,13 +108,15 @@
   "titel": "Lieblingsbäcker an der Küste",
   "autor": "Frau Brunhilde Kowalski",
   "ort": "Katzenfurt",
-  "text": "Das Franzbrötchen in Scharbeutz ist ein Gedicht. Es dürfen ruhig mehr Menschen davon erfahren, aber bitte nicht alle gleichzeitig."
+  "text": "Das Franzbrötchen in Scharbeutz ist ein Gedicht. Es dürfen ruhig mehr Menschen davon erfahren, aber bitte nicht alle gleichzeitig.",
+  "antwort": "Die Redaktion hat zur Kontrolle selbst probiert. Gründlich, mehrfach."
  },
  {
   "titel": "Portugiesische Grüße",
   "autor": "Maria dos Santos",
   "ort": "Hamburg",
-  "text": "Meine Familie in Portugal schickt Sardinen vom Grill. Im Oktober schmecken sie am besten, sagt meine Oma. Kommt vorbei!"
+  "text": "Meine Familie in Portugal schickt Sardinen vom Grill. Im Oktober schmecken sie am besten, sagt meine Oma. Kommt vorbei!",
+  "antwort": "Die Redaktion kommt gern. Bitte Brot nicht vergessen."
  },
  {
   "titel": "Parkplatz-Chaos",
@@ -122,13 +129,15 @@
   "titel": "Winter an der Ostsee",
   "autor": "Käpt'n Jörn Thießen",
   "ort": "Scharbeutz",
-  "text": "Im Winter gehört der Strand uns. Nebel, Möwenruf, ein heißer Tee in der Hand. Wer das nicht liebt, war nie da."
+  "text": "Im Winter gehört der Strand uns. Nebel, Möwenruf, ein heißer Tee in der Hand. Wer das nicht liebt, war nie da.",
+  "antwort": "Die Redaktion gibt dem Winter recht, empfiehlt aber Mütze."
  },
  {
   "titel": "Grüße aus Halifax",
   "autor": "Margaret Tremblay",
   "ort": "Halifax, Kanada",
-  "text": "Liebe Redaktion, ich lese Ihre Zeitung mit Wörterbuch und Freude. In Halifax riecht der Hafen nach Hummer, in Scharbeutz nach Fischbrötchen, und beides ist Heimat. Meine Tante aus Wetzlar schreibt, dass Ahornsirup auf Pfannkuchen auch bei Ihnen Anerkennung findet.\nBitte berichten Sie mehr über Ihre Möwen. Unsere sind ebenfalls frech."
+  "text": "Liebe Redaktion, ich lese Ihre Zeitung mit Wörterbuch und Freude. In Halifax riecht der Hafen nach Hummer, in Scharbeutz nach Fischbrötchen, und beides ist Heimat. Meine Tante aus Wetzlar schreibt, dass Ahornsirup auf Pfannkuchen auch bei Ihnen Anerkennung findet.\nBitte berichten Sie mehr über Ihre Möwen. Unsere sind ebenfalls frech.",
+  "antwort": "Die Redaktion richtet aus: Unsere Möwen sind frecher, das wurde amtlich festgestellt."
  },
  {
   "titel": "Radio statt Smartphone",
@@ -141,13 +150,15 @@
   "titel": "Wellen in Nazaré",
   "autor": "Joaquim Pereira",
   "ort": "Nazaré, Portugal",
-  "text": "Verehrte Redaktion, wenn im Winter die großen Wellen kommen, steht ganz Nazaré am Leuchtturm. Die Fischer legen die Netze aus, die Frauen trocknen den Fisch in der Sonne, und ich koche Caldeirada.\nWer Portugal besucht, soll bei uns vorbeischauen. Mit Brot und Wein ist jeder Gast willkommen."
+  "text": "Verehrte Redaktion, wenn im Winter die großen Wellen kommen, steht ganz Nazaré am Leuchtturm. Die Fischer legen die Netze aus, die Frauen trocknen den Fisch in der Sonne, und ich koche Caldeirada.\nWer Portugal besucht, soll bei uns vorbeischauen. Mit Brot und Wein ist jeder Gast willkommen.",
+  "antwort": "Die Redaktion hat Hunger bekommen und bittet um das Rezept."
  },
  {
   "titel": "Wieder Regen am Feiertag",
   "autor": "Frau Brunhilde Kowalski",
   "ort": "Katzenfurt",
-  "text": "Immer wenn der Kuchen fertig ist, schüttet es. Dafür gibt es Tee und Dominosteine. Man muss nur wollen."
+  "text": "Immer wenn der Kuchen fertig ist, schüttet es. Dafür gibt es Tee und Dominosteine. Man muss nur wollen.",
+  "antwort": "Dominosteine zählen laut Redaktion zu den Grundnahrungsmitteln."
  },
  {
   "titel": "Beschwerde über Beschwerden",
@@ -160,7 +171,8 @@
   "titel": "Mein Fisch am Freitag",
   "autor": "Käpt'n Jörn Thießen",
   "ort": "Scharbeutz",
-  "text": "Frisch gefangen, frisch gebraten, mehr braucht es nicht. Wer Fischstäbchen vorzieht, bekommt von mir trotzdem einen Gruß."
+  "text": "Frisch gefangen, frisch gebraten, mehr braucht es nicht. Wer Fischstäbchen vorzieht, bekommt von mir trotzdem einen Gruß.",
+  "antwort": "Fischstäbchen wurden informiert und zeigen sich zerknirscht."
  },
  {
   "titel": "Berliner Schnauze",
@@ -180,7 +192,8 @@
   "titel": "Ein Gruß aus Katzenfurt",
   "autor": "Frau Brunhilde Kowalski",
   "ort": "Katzenfurt",
-  "text": "Unser Dorf ist klein, aber der Tee ist groß. Wer vorbeikommt, bekommt eine Tasse und Geschichten dazu."
+  "text": "Unser Dorf ist klein, aber der Tee ist groß. Wer vorbeikommt, bekommt eine Tasse und Geschichten dazu.",
+  "antwort": "Die Redaktion kommt zum Tee. Geschichten bringt sie mit."
  },
  {
   "titel": "Möwen, die Zweite",
@@ -193,7 +206,8 @@
   "titel": "Dank für die Zeitung",
   "autor": "Inge Möller",
   "ort": "Timmendorfer Strand",
-  "text": "Ich lese den Kurier jeden Morgen zum Tee. Die Schrift ist groß und klar. Weiter so!"
+  "text": "Ich lese den Kurier jeden Morgen zum Tee. Die Schrift ist groß und klar. Weiter so!",
+  "antwort": "Die Redaktion bedankt sich. Die große Schrift ist Absicht."
  },
  {
   "titel": "Das Nebelhorn ist zu laut",
@@ -234,7 +248,8 @@
   "titel": "Der Kapitän kannte meinen Namen",
   "autor": "Inge Möller",
   "ort": "Timmendorfer Strand",
-  "text": "Heute grüßte mich der Kapitän der Fähre mit Namen. Ich wusste gar nicht, dass er ihn kennt. Das hat mich den ganzen Tag gefreut."
+  "text": "Heute grüßte mich der Kapitän der Fähre mit Namen. Ich wusste gar nicht, dass er ihn kennt. Das hat mich den ganzen Tag gefreut.",
+  "antwort": "Die Redaktion richtet aus: Der Kapitän kennt sogar die Möwen beim Namen."
  },
  {
   "titel": "Dank an die Bäckerin",
@@ -261,7 +276,8 @@
   "titel": "Wenn der Wind dreht",
   "autor": "Käpt'n Jörn Thießen",
   "ort": "Scharbeutz",
-  "text": "Wenn der Wind dreht, beißen sie nicht. Wenn der Wind bleibt, auch nicht. Das nennt man Fischerei."
+  "text": "Wenn der Wind dreht, beißen sie nicht. Wenn der Wind bleibt, auch nicht. Das nennt man Fischerei.",
+  "antwort": "Die Redaktion spricht von Geduld, der Fisch von Mitbestimmung."
  },
  {
   "titel": "Stiefel gefunden",
@@ -281,7 +297,8 @@
   "titel": "Der Herbst riecht nach Sardinen",
   "autor": "Maria dos Santos",
   "ort": "Hamburg",
-  "text": "Meine Mutter ruft an und fragt, ob ich schon Salz auf dem Brot hatte. Ich sage ja und lüge ein bisschen. Heute Abend gibt es Sardinen aus der Dose, und sie sind trotzdem gut."
+  "text": "Meine Mutter ruft an und fragt, ob ich schon Salz auf dem Brot hatte. Ich sage ja und lüge ein bisschen. Heute Abend gibt es Sardinen aus der Dose, und sie sind trotzdem gut.",
+  "antwort": "Die Redaktion hält Dosensardinen für hoch angesehen und bestätigt: Sie sind gut."
  },
  {
   "titel": "Ahornsirup und Matjes",
@@ -294,6 +311,7 @@
   "titel": "Der Kurier kommt spät",
   "autor": "Joaquim Pereira",
   "ort": "Nazaré, Portugal",
-  "text": "Verehrte Redaktion, Ihre Zeitung erreicht mich mit viel Verspätung und gern mit Wörterbuch. Ich lese sie trotzdem jeden Morgen zum Kaffee. Die Möwen in Nazaré sind lauter als Ihre, das möchte ich festhalten."
+  "text": "Verehrte Redaktion, Ihre Zeitung erreicht mich mit viel Verspätung und gern mit Wörterbuch. Ich lese sie trotzdem jeden Morgen zum Kaffee. Die Möwen in Nazaré sind lauter als Ihre, das möchte ich festhalten.",
+  "antwort": "Die Redaktion bittet um Verzeihung. Der Postbote wurde zur Rede gestellt und nennt den Wind schuld."
  }
 ]
