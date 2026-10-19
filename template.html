@@ -2,53 +2,196 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Der Küsten-Kurier</title>
-<meta name="description" content="Die Zeitung für Küste, Kutter und Kaffeetafel.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Der Küsten-Kurier – 19. Jahrhundert Schifffahrts-Zeitung</title>
+<meta name="description" content="Die Zeitung für Küste, Kutter und Kaffeetafel. Täglich frische Nachrichten, Seewetter und Börsennotizen.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#182c38">
 <link rel="stylesheet" href="{{ROOT}}style.css?v={{BUILD}}">
 </head>
 <body>
-<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+<a class="skip" href="#inhalt">Zum Hauptinhalt springen</a>
+
 <header class="masthead">
-  <div class="wrap brand">
-    <svg class="logo" role="img" aria-labelledby="lt" viewBox="0 0 140 70"><title id="lt">Logo: Fisch vor einem Leuchtturm</title>
-      <circle cx="70" cy="35" r="33" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="2 4"/>
-      <path d="M22 38c14-22 40-22 58 0-18 22-44 22-58 0z" fill="currentColor"/><path d="M80 38l20-15v30z" fill="currentColor"/>
-      <circle cx="37" cy="33" r="3.5" fill="#0b2e43"/><rect x="106" y="18" width="10" height="36" fill="#e8b4a8"/><path d="M104 18l7-9 7 9z" fill="currentColor"/>
-      <path d="M10 62c8-6 14 6 22 0s14 6 22 0 14 6 22 0 14 6 22 0 14 6 22 0" fill="none" stroke="currentColor" stroke-width="3"/></svg>
-    <div>
-      <p class="edition">Seit heute frisch aus der Druckerei</p>
-      <h1>Der Küsten-Kurier</h1>
-      <p class="tag">Die Zeitung für Küste, Kutter und Kaffeetafel</p>
+  <!-- Victorian Top Ribbon -->
+  <div class="wrap top-ear-ribbon">
+    <div class="ear left-ear">
+      <span class="ear-title">Handels- &amp; Fischerei-Blatt</span>
+      <span class="ear-desc">Unabhängige Küstenpost</span>
+    </div>
+    <div class="ear-center">
+      <span class="ornament">❧ ⚓ ☙</span>
+      <span class="ear-motto">„Gott schütze Kutter und Besatzung“</span>
+    </div>
+    <div class="ear right-ear">
+      <span class="ear-title">Morgen-Ausgabe</span>
+      <span class="ear-desc">Preis: 10 Pfennige</span>
     </div>
   </div>
-  <p class="dateline wrap">{{DATUM}}</p>
-  <svg class="waves" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 12c50-14 100-14 150 0s100 14 150 0 100-14 150 0 100 14 150 0 100-14 150 0 100 14 150 0 100-14 150 0 100 14 150 0V24H0z" fill="var(--bg)"/></svg>
+
+  <div class="wrap brand">
+    <!-- 19th Century Woodcut Style Coastal Engraving -->
+    <div class="engraving-box" aria-hidden="true">
+      <svg class="engraved-logo" viewBox="0 0 160 80" role="img" aria-labelledby="lt">
+        <title id="lt">Holzstich: Fischerkutter vor dem Leuchtturm in bewegter See</title>
+        <!-- Sun rays -->
+        <g stroke="currentColor" stroke-width="0.8" opacity="0.6">
+          <line x1="80" y1="40" x2="20" y2="10" />
+          <line x1="80" y1="40" x2="50" y2="5" />
+          <line x1="80" y1="40" x2="80" y2="3" />
+          <line x1="80" y1="40" x2="110" y2="5" />
+          <line x1="80" y1="40" x2="140" y2="10" />
+        </g>
+        <!-- Engraved Lighthouse -->
+        <polygon points="122,22 130,22 133,65 119,65" fill="#fdfaf3" stroke="currentColor" stroke-width="1.5" />
+        <!-- Lighthouse stripes -->
+        <rect x="121" y="32" width="10" height="7" fill="#8c2d19" />
+        <rect x="120" y="47" width="12" height="7" fill="#8c2d19" />
+        <!-- Lantern room and dome -->
+        <rect x="123" y="16" width="6" height="6" fill="#fdfaf3" stroke="currentColor" stroke-width="1.2" />
+        <path d="M121 16 Q126 9 131 16 Z" fill="currentColor" />
+        <line x1="126" y1="9" x2="126" y2="5" stroke="currentColor" stroke-width="1.5" />
+        <circle cx="126" cy="19" r="1.5" fill="#e8c872" />
+        <!-- Sea cliffs/rocks -->
+        <path d="M110 65 Q118 58 138 65 Q150 67 155 72 L105 72 Z" fill="#2d3748" />
+
+        <!-- 19th-Century Fishing Cutter (Segelkutter) -->
+        <!-- Hull -->
+        <path d="M28 52 C38 60, 78 62, 92 50 C94 56, 85 64, 40 64 C26 64, 22 57, 28 52 Z" fill="#2a1f18" stroke="currentColor" stroke-width="1.2" />
+        <!-- Rudder & bowsprit -->
+        <line x1="90" y1="51" x2="104" y2="46" stroke="currentColor" stroke-width="1.8" />
+        <!-- Main Mast -->
+        <line x1="56" y1="56" x2="56" y2="15" stroke="currentColor" stroke-width="2.2" />
+        <!-- Mizzen Mast -->
+        <line x1="38" y1="56" x2="38" y2="28" stroke="currentColor" stroke-width="1.6" />
+        <!-- Main Sail (Großsegel) -->
+        <path d="M57 19 L82 28 L78 50 L57 53 Z" fill="#fcf6ea" stroke="currentColor" stroke-width="1.2" />
+        <!-- Jib Sail (Focksegel) -->
+        <path d="M57 20 L102 46 L60 48 Z" fill="#f7edd8" stroke="currentColor" stroke-width="1.2" />
+        <!-- Rigging ropes (Takelage) -->
+        <line x1="56" y1="16" x2="28" y2="53" stroke="currentColor" stroke-width="0.7" stroke-dasharray="2 1" />
+        <line x1="56" y1="16" x2="103" y2="47" stroke="currentColor" stroke-width="0.7" />
+        <!-- Sea Waves hatching (Holzschnitt-Wellen) -->
+        <path d="M5 68 C20 64, 35 72, 50 68 C65 64, 80 72, 95 68 C110 64, 125 72, 140 68 C150 65, 155 70, 158 68" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        <!-- Leaping Baltic Fish in the foreground waves -->
+        <g class="engraved-fish">
+          <!-- Body -->
+          <path d="M10 66 C14 50, 26 44, 38 52 C32 54, 24 59, 18 69 Z" fill="#fcf6ea" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
+          <!-- Tail fin -->
+          <path d="M11 65 L4 60 C6 66, 6 68, 3 73 L11 69 Z" fill="#fcf6ea" stroke="currentColor" stroke-width="1.2" />
+          <!-- Dorsal fin -->
+          <path d="M22 47 C26 44, 32 45, 34 50 Z" fill="currentColor" />
+          <!-- Pectoral fin -->
+          <path d="M26 56 L23 64 L29 60 Z" fill="currentColor" />
+          <!-- Eye & gill -->
+          <circle cx="34" cy="51" r="1.3" fill="currentColor" />
+          <circle cx="34.3" cy="50.8" r="0.4" fill="#fcf6ea" />
+          <path d="M30 49 C32 52, 31 55, 28 56" stroke="currentColor" stroke-width="0.9" fill="none" />
+          <!-- Sea spray droplets -->
+          <circle cx="16" cy="48" r="0.8" fill="currentColor" opacity="0.7" />
+          <circle cx="21" cy="42" r="0.7" fill="currentColor" opacity="0.7" />
+          <circle cx="41" cy="48" r="0.9" fill="currentColor" opacity="0.7" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="brand-text">
+      <p class="edition-sub">Seit 1878 herausgegeben an der Lübecker Bucht</p>
+      <h1 class="newspaper-title">Der Küsten-Kurier</h1>
+      <div class="title-fish-ornament" aria-hidden="true">
+        <span class="ornament-line"></span>
+        <svg class="small-fish-ico" viewBox="0 0 36 14" fill="currentColor">
+          <path d="M2 7 C8 2, 22 2, 28 7 C22 12, 8 12, 2 7 Z" />
+          <path d="M28 7 L34 2 L32 7 L34 12 Z" />
+          <circle cx="8" cy="6" r="1" fill="var(--mast, #182c38)" />
+          <path d="M12 5 C13 7, 13 8, 12 9" stroke="var(--mast, #182c38)" stroke-width="0.8" fill="none" />
+        </svg>
+        <span class="ornament-line"></span>
+      </div>
+      <p class="tagline">Allgemeine Schifffahrts-, Hafen- und Fischerei-Zeitung für Küste, Kutter &amp; Kaffeetafel</p>
+    </div>
+  </div>
+
+  <!-- Ornate Broadsheet Dateline -->
+  <div class="dateline-container wrap">
+    <div class="dateline-rule top-rule"></div>
+    <div class="dateline">
+      <span class="dateline-item dateline-issue">Jahrgang XLVIII · No. 293</span>
+      <span class="dateline-sep">✦</span>
+      <span class="dateline-item dateline-location">Scharbeutz &amp; Ostseeküste</span>
+      <span class="dateline-sep">✦</span>
+      <span class="dateline-item dateline-date">{{DATUM}}</span>
+    </div>
+    <div class="dateline-rule bottom-rule"></div>
+  </div>
 </header>
-<div class="wrap tools" role="group" aria-label="Anzeigeoptionen">
-  <button id="bigger" type="button" aria-label="Schrift größer">A+</button>
-  <button id="smaller" type="button" aria-label="Schrift kleiner">A−</button>
-  <button id="vorlesen" type="button">Vorlesen</button>
-  <button id="contrast" type="button" aria-pressed="false">Hoher Kontrast</button>
-  <a href="{{ROOT}}archive/index.html">Archiv</a>
-  <a href="{{ROOT}}briefe.html">Leserbriefe-Archiv</a>
-</div>
-<main id="inhalt" class="wrap">
+
+<!-- Accessible BroadSheet Tool Ribbon (Optimized for macOS & iOS) -->
+<nav class="wrap tools" role="region" aria-label="Lese- und Anzeige-Einstellungen">
+  <div class="tool-group">
+    <button id="bigger" type="button" aria-label="Schrift vergrößern">Schrift A+</button>
+    <button id="smaller" type="button" aria-label="Schrift verkleinern">Schrift A−</button>
+    <button id="contrast" type="button" aria-pressed="false">Hoher Kontrast</button>
+  </div>
+  <div class="nav-links">
+    <a href="{{ROOT}}archive/index.html">Archiv der Ausgaben</a>
+    <a href="{{ROOT}}briefe.html">Leserbriefe-Archiv</a>
+  </div>
+</nav>
+
+<main id="inhalt" class="wrap broadsheet-content">
   {{ALERTS}}
+  
   {{LEAD}}
-  <div class="banner" role="region" aria-labelledby="w"><h2 id="w" class="sr-only">Wetter an der Küste</h2><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12c3-4 5-4 8 0s5 4 8 0 3-2 4-1M2 18c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/></svg> {{WETTER}}</div>
+
+  <!-- Telegraphische Wetter-Depesche -->
+  <div class="banner telegraph-banner" role="region" aria-labelledby="w">
+    <span class="telegraph-stamp">Depesche</span>
+    <h2 id="w" class="sr-only">Wetter an der Küste</h2>
+    <div class="telegraph-text">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12c3-4 5-4 8 0s5 4 8 0 3-2 4-1M2 18c3-4 5-4 8 0s5 4 8 0 3-2 4-1"/></svg>
+      <strong>Telegramm vom Wetterwart Scharbeutz:</strong> {{WETTER}}
+    </div>
+  </div>
+
   {{SEE}}
+
   {{FISCH}}
-  <div class="grid">{{NEWS}}</div>
+
+  <div class="grid news-grid">
+    {{NEWS}}
+  </div>
+
   {{BOERSE}}
-  <section class="card" aria-labelledby="c"><h2 id="c">Webcams an der Küste</h2>{{CAMS}}</section>
+
+  <section class="card webcam-section" aria-labelledby="c">
+    <h2 id="c"><span class="section-decor">⚓</span> Optische Küstenstationen &amp; Webcams</h2>
+    {{CAMS}}
+  </section>
+
   {{DUO}}
+
   {{REZEPT}}
+
   {{ANZEIGEN}}
-  <p class="small erfunden">Leserbriefe, Hafenklatsch, Logbuch und Kleinanzeigen sind frei erfunden.</p>
-  <section class="card letter" aria-labelledby="l"><h2 id="l">Leserbrief des Tages</h2>{{BRIEF}}</section>
+
+  <p class="small erfunden">Leserbriefe, Hafenklatsch, Logbuch und Kleinanzeigen sind literarisch frei erfunden.</p>
+
+  <section class="card letter" aria-labelledby="l">
+    <h2 id="l"><span class="section-decor">✉</span> Postalischer Leserbrief des Tages</h2>
+    {{BRIEF}}
+  </section>
 </main>
-<footer><div class="wrap"><p>© <span id="year">{{YEAR}}</span> Der Küsten-Kurier · <span>Gestaltet und gepflegt von Wolfram und Poyi</span></p></div></footer>
+
+<footer>
+  <div class="wrap colophon">
+    <div class="colophon-ornament">❧ ⚓ ☙</div>
+    <p>© <span id="year">{{YEAR}}</span> Der Küsten-Kurier · Redaktion, Satz &amp; Buchdruck Wolfram und Poyi</p>
+    <p class="colophon-sub">Gedruckt auf holzfreiem Hadernpapier nach überlieferter Küstentradition.</p>
+  </div>
+</footer>
+
 <script src="{{ROOT}}app.js?v={{BUILD}}"></script>
 </body>
 </html>

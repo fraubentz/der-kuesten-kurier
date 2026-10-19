@@ -1,81 +1,873 @@
-:root{--bg:#f6f1e7;--fg:#1a1a1a;--card:#fffdf8;--accent:#0b4f6c;--line:#c9bfa8;--mast:#0b2e43;--mastfg:#fdf6e3;--red:#b3261e;font-size:112.5%}
-@media(prefers-color-scheme:dark){:root:not(.hc){--bg:#10222b;--fg:#f2efe8;--card:#17313d;--accent:#8fd0ea;--line:#3a5865;--mast:#081a25;--red:#ff8a80}}
-.hc{--bg:#000;--fg:#fff;--card:#000;--accent:#ffeb3b;--line:#fff;--mast:#000;--mastfg:#fff;--red:#ff8a80}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:1rem/1.7 Georgia,"Palatino Linotype",Palatino,serif}
-.wrap{max-width:74rem;margin:auto;padding:0 1rem}
-a{color:var(--accent);text-underline-offset:.2em}
-a:focus-visible,button:focus-visible{outline:4px solid #ff9800;outline-offset:3px}
-.skip{position:absolute;left:-999px}.skip:focus{left:1rem;top:1rem;background:#fff;color:#000;padding:.5rem;z-index:9}
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.ico{width:1.3em;height:1.3em;vertical-align:-.25em;margin-right:.4em;flex:none}
-.masthead{background:var(--mast);color:var(--mastfg);padding-top:1.2rem;border-top:10px solid transparent;border-image:repeating-linear-gradient(135deg,#d9c29a 0 8px,#a68a5b 8px 16px) 10}
-.brand{display:flex;gap:1.5rem;align-items:center;justify-content:center;flex-wrap:wrap;text-align:center}
-.logo{width:9rem;height:auto;color:var(--mastfg)}
-h1{font:700 clamp(2.2rem,7vw,4.2rem)/1.05 Georgia,"Palatino Linotype",serif;font-variant:small-caps;letter-spacing:.06em;margin:.1rem 0}
-.edition,.tag{margin:.1rem 0;font-style:italic;letter-spacing:.04em}
-.dateline{text-align:center;border-top:1px solid var(--mastfg);border-bottom:1px solid var(--mastfg);margin:.8rem auto 0;padding:.3rem 1rem;font-variant:small-caps;letter-spacing:.08em}
-.waves{display:block;width:100%;height:1.6rem;margin-top:.6rem}
-.tools{display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem auto 0}
-.tools button,.tools a{font:inherit;min-height:2.75rem;padding:.4rem 1rem;border:2px solid var(--accent);background:var(--card);color:var(--accent);border-radius:.4rem;text-decoration:none;cursor:pointer}
-.banner{display:flex;align-items:center;gap:.3rem;background:var(--accent);color:var(--bg);padding:.6rem 1rem;border-radius:.5rem;font-weight:700;margin:1rem 0}
-.hc .banner{color:#000}
-.ticker{list-style:none;margin:0 0 1rem;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
-.ticker li{display:flex;align-items:center;background:var(--card);border:2px dashed var(--line);border-radius:2rem;padding:.2rem .9rem}
-.lead{border-top:6px double var(--fg);border-bottom:2px solid var(--line);padding:1rem 0;margin:1rem 0 1.5rem}
-.lead h2{font-size:clamp(1.7rem,4.5vw,2.8rem);line-height:1.2;border:0;margin:.2rem 0;color:var(--fg)}
-.lead h2 a{color:inherit}
-.kicker{color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin:0}
-.src{font-size:.85rem;font-style:italic;margin:.2rem 0}.small{font-size:.85rem;font-style:italic}
-.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))}
-@media(min-width:62rem){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:.4rem;padding:1rem 1.25rem;margin:1rem 0}
-.grid .card{margin:0}
-h2{margin-top:0;color:var(--accent);border-bottom:2px solid var(--line);font-variant:small-caps;letter-spacing:.04em}
-.news{padding-left:1.1rem}.news li{margin-bottom:.8rem}
-.alert{background:#fff3cd;color:#1a1a1a;border:4px solid var(--red);border-radius:.5rem;padding:.5rem 1.25rem;margin:1rem 0}.alert h2{color:#b3261e}
-.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{border:1px solid var(--line);padding:.5rem;text-align:left}
-.letter{border:2px solid var(--fg);border-top-width:6px;border-style:double;background:var(--card)}
-.letter h3{font-style:italic}.letter .sig{text-align:right;font-style:italic}
-footer{background:var(--mast);color:var(--mastfg);margin-top:2rem;padding:1.5rem 1rem;text-align:center}
-@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+/* Der Küsten-Kurier – 19th Century Broadsheet Newspaper Stylesheet
+   Optimized for macOS, iOS Safari & Retina Displays */
 
-.brief h3{font-size:1.4rem}
-.badge{display:inline-block;background:var(--accent);color:var(--bg);padding:.1rem .8rem;border-radius:1rem;font-size:.9rem;font-weight:700}
-.hc .badge{color:#000}
-.absender{display:flex;gap:1rem;align-items:center;justify-content:flex-end;flex-wrap:wrap}
-.stamp{width:4.2rem;height:4.9rem;display:grid;place-items:center;color:var(--red);background:var(--bg);padding:.4rem;border:3px dotted var(--red)}
-.stamp .ico{width:2.4rem;height:2.4rem;margin:0}
-.sig{text-align:right;font-style:italic;margin:.5rem 0}
-.antwort{border-left:5px solid var(--accent);padding:.3rem 1rem;margin:1rem 0 0;background:var(--bg)}
+:root {
+  --bg: #f5f0e6;
+  --fg: #1d1a17;
+  --card: #fdfaf4;
+  --accent: #13394e;
+  --accent-light: #2c5970;
+  --line: #d1c7b3;
+  --line-dark: #26221d;
+  --mast: #182c38;
+  --mastfg: #f9f5eb;
+  --red: #8f281e;
+  --gold: #b38b36;
+  --up: #1c6832;
+  --down: #992318;
+  font-size: 112.5%;
+}
 
-.duo{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));margin:1rem 0}
-.duo .card{margin:0}
-.klatsch{border-top-color:var(--red)}.klatsch h3{margin:.2rem 0}
-.logbuch{font-family:"Courier New",Courier,monospace;border-top-style:dashed}
-.kutter{margin:0;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
-.erfunden{text-align:center;margin:1rem 0}
+@media (prefers-color-scheme: dark) {
+  :root:not(.hc) {
+    --bg: #141f26;
+    --fg: #ece7dc;
+    --card: #1c2b34;
+    --accent: #8dc1dc;
+    --accent-light: #5ea4c4;
+    --line: #3b4e58;
+    --line-dark: #abb8bf;
+    --mast: #0d161c;
+    --mastfg: #f4efe2;
+    --red: #f38b82;
+    --gold: #dfb962;
+    --up: #65d586;
+    --down: #f38b82;
+  }
+}
 
-.fischblock{margin:1.5rem 0}
-.fischblock>h2{font-size:1.6rem}
+.hc {
+  --bg: #000000;
+  --fg: #ffffff;
+  --card: #0a0a0a;
+  --accent: #ffff00;
+  --accent-light: #ffff88;
+  --line: #ffffff;
+  --line-dark: #ffffff;
+  --mast: #000000;
+  --mastfg: #ffffff;
+  --red: #ff6666;
+  --gold: #ffff00;
+  --up: #66ff66;
+  --down: #ff6666;
+}
 
-:root{--up:#17692e;--down:#b3261e}
-@media(prefers-color-scheme:dark){:root:not(.hc){--up:#7fdc97;--down:#ff8a80}}
-.hc{--up:#7fdc97;--down:#ff8a80}
-.boerse-grid{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))}
-.ware h3{margin:.2rem 0}
-.kurs{font-size:1.5rem;margin:.2rem 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:.2rem .7rem}
-.delta{font-size:1rem;font-weight:700;white-space:nowrap}.delta.up{color:var(--up)}.delta.down{color:var(--down)}
-.ware table{margin:.5rem 0}.ware caption{text-align:left;font-weight:700;padding:.3rem 0}
+/* System & Reset */
+*, *:before, *:after {
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  -webkit-tap-highlight-color: rgba(19, 57, 78, 0.2);
+}
 
-.grid>*,.duo>*,.boerse-grid>*{min-width:0}
-.card,.lead{overflow-wrap:break-word}
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-.fakten{display:grid;gap:.6rem 1.5rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));margin:0}
-.fakten div{border-left:4px solid var(--accent);padding-left:.8rem}
-.fakten dt{font-weight:700;color:var(--accent)}.fakten dd{margin:0}
-.rezepte{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))}
-.rezepte>*{min-width:0}
-.rezept h3{margin:.2rem 0}.rezept h4{margin:.8rem 0 .2rem}.rezept ul,.rezept ol{margin:.2rem 0;padding-left:1.3rem}
-.anzeigen ul{list-style:none;margin:0;padding:0;display:grid;gap:.8rem}
-.anzeigen li{border:2px dashed var(--line);padding:.6rem .9rem;border-radius:.3rem}
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--fg);
+  font: 1rem/1.7 -apple-system-ui-serif, "New York", "Hoefler Text", "Baskerville", "Didot", "Playfair Display", Georgia, "Times New Roman", serif;
+  text-rendering: optimizeLegibility;
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+  overflow-x: hidden;
+}
+
+.wrap {
+  max-width: 76rem;
+  margin: auto;
+  padding: 0 max(0.85rem, env(safe-area-inset-left, 0.85rem));
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  color: var(--red);
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #ff9800;
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+}
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  background: #ffffff;
+  color: #000000;
+  padding: 0.6rem 1.2rem;
+  z-index: 100;
+  border: 2px solid #000;
+  font-weight: bold;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.ico {
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.22em;
+  margin-right: 0.4em;
+  flex: none;
+}
+
+/* 19th Century Masthead */
+.masthead {
+  background: var(--mast);
+  color: var(--mastfg);
+  padding: 1.2rem 0 0.8rem;
+  border-top: 6px double var(--gold);
+  border-bottom: 4px double var(--line);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Victorian Top Ear Ribbon */
+.top-ear-ribbon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+.ear {
+  display: flex;
+  flex-direction: column;
+}
+.ear-title {
+  font-weight: 700;
+  color: var(--gold);
+}
+.ear-desc {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+.ear-center {
+  text-align: center;
+}
+.ear-center .ornament {
+  font-size: 1.1rem;
+  color: var(--gold);
+  display: block;
+}
+.ear-motto {
+  font-style: italic;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 48rem) {
+  .top-ear-ribbon {
+    display: none;
+  }
+}
+
+/* Masthead Brand Block */
+.brand {
+  display: flex;
+  gap: 1.8rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+@media (max-width: 52rem) {
+  .brand {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+}
+
+.engraving-box {
+  flex: none;
+  width: 9.5rem;
+  height: auto;
+  border: 2px solid var(--gold);
+  padding: 0.35rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+.engraved-logo {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: var(--mastfg);
+}
+
+.brand-text {
+  max-width: 50rem;
+}
+.edition-sub {
+  margin: 0;
+  font-size: 0.88rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+}
+.newspaper-title {
+  font: 900 clamp(2.4rem, 7.5vw, 4.4rem)/1.02 "Didot", "New York", "Playfair Display", Georgia, serif;
+  letter-spacing: 0.04em;
+  margin: 0.25rem 0;
+  text-transform: none;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);
+}
+.title-fish-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin: 0.25rem auto;
+  max-width: 14rem;
+  color: var(--gold);
+}
+.ornament-line {
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+.small-fish-ico {
+  width: 2.2rem;
+  height: 0.9rem;
+  flex: none;
+}
+.tagline {
+  margin: 0.2rem 0 0;
+  font-style: italic;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  opacity: 0.92;
+}
+
+/* 19th Century Broadsheet Dateline */
+.dateline-container {
+  margin-top: 1rem;
+}
+.dateline-rule {
+  height: 2px;
+  background: var(--mastfg);
+  opacity: 0.4;
+}
+.dateline-rule.top-rule {
+  margin-bottom: 0.35rem;
+}
+.dateline-rule.bottom-rule {
+  margin-top: 0.35rem;
+}
+.dateline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.4rem;
+  padding: 0.35rem 0;
+  font-size: 0.92rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.4;
+}
+.dateline-item {
+  display: inline-block;
+}
+.dateline-sep {
+  color: var(--gold);
+  font-size: 0.8rem;
+  user-select: none;
+}
+@media (max-width: 48rem) {
+  .dateline {
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.84rem;
+    padding: 0.4rem 0;
+  }
+  .dateline-sep {
+    display: none;
+  }
+  .dateline-issue {
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+  }
+  .dateline-location {
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+  }
+  .dateline-date {
+    font-style: italic;
+    text-transform: none;
+    font-variant: normal;
+  }
+}
+
+/* Tools bar (Optimized for touch & Apple HIG) */
+.tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.8rem auto 1.2rem;
+  padding: 0.4rem max(1rem, env(safe-area-inset-left, 1rem));
+  border-bottom: 2px solid var(--line);
+}
+.tool-group,
+.nav-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.tools button,
+.tools a {
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  min-height: 2.75rem; /* 44px touch target for iOS */
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--line-dark);
+  background: var(--card);
+  color: var(--fg);
+  border-radius: 3px;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.tools button:active,
+.tools a:active {
+  background: var(--line);
+}
+.tools button:hover,
+.tools a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Content Area */
+.broadsheet-content {
+  padding-bottom: 2rem;
+}
+
+/* Telegraph Weather Dispatch Banner */
+.telegraph-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: var(--card);
+  border: 2px solid var(--accent);
+  border-left: 6px solid var(--accent);
+  padding: 0.8rem 1.1rem;
+  border-radius: 2px;
+  margin: 1.2rem 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.04);
+}
+.telegraph-stamp {
+  flex: none;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  padding: 0.25rem 0.6rem;
+  background: var(--accent);
+  color: var(--bg);
+  border-radius: 2px;
+}
+.hc .telegraph-stamp {
+  color: #000;
+}
+.telegraph-text {
+  min-width: 0;
+  flex: 1;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+@media (max-width: 40rem) {
+  .telegraph-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 0.75rem 0.85rem;
+    border-left-width: 4px;
+  }
+  .telegraph-stamp {
+    align-self: flex-start;
+  }
+  .telegraph-text {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+}
+
+/* Alerts */
+.alert {
+  background: #fff8e7;
+  color: #1a1a1a;
+  border: 3px double var(--red);
+  border-left: 8px solid var(--red);
+  padding: 0.8rem 1.4rem;
+  margin: 1rem 0;
+}
+.alert h2 {
+  color: var(--red);
+  margin-top: 0;
+  border-bottom: 1px solid var(--red);
+}
+
+/* Aufmacher / Lead Article */
+.lead {
+  border-top: 4px double var(--line-dark);
+  border-bottom: 2px solid var(--line-dark);
+  padding: 1.2rem 0 1rem;
+  margin: 1rem 0 1.5rem;
+  text-align: center;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.lead .kicker {
+  color: var(--red);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.92rem;
+  margin: 0 0 0.4rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.lead h2 {
+  font-size: clamp(1.4rem, 4.2vw, 2.8rem);
+  line-height: 1.18;
+  border: 0;
+  margin: 0.3rem auto 0.6rem;
+  max-width: 58rem;
+  color: var(--fg);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+.lead h2 a {
+  color: inherit;
+  text-decoration: none;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.lead h2 a:hover {
+  text-decoration: underline;
+}
+.lead .src {
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0.3rem 0 0;
+  opacity: 0.85;
+  overflow-wrap: break-word;
+}
+
+/* Broadsheet Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--line-dark);
+  padding: 1.15rem 1.25rem;
+  margin: 1.2rem 0;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03);
+}
+@media (max-width: 40rem) {
+  .card {
+    padding: 0.85rem 0.85rem;
+    margin: 0.9rem 0;
+  }
+}
+.card h2 {
+  margin-top: 0;
+  padding-bottom: 0.35rem;
+  color: var(--accent);
+  border-bottom: 1px solid var(--line);
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  font-size: 1.35rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.section-decor {
+  color: var(--gold);
+  margin-right: 0.4rem;
+}
+
+/* Seewetter & Nautik */
+.see dl.fakten {
+  display: grid;
+  gap: 0.8rem 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  margin: 0.8rem 0;
+  min-width: 0;
+}
+.fakten div {
+  border-left: 3px solid var(--accent);
+  padding-left: 0.8rem;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.fakten dt {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.fakten dd {
+  margin: 0.15rem 0 0;
+  font-size: 1.05rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Fischerei Block */
+.fischblock {
+  margin: 1.8rem 0;
+  border-top: 3px double var(--line-dark);
+  padding-top: 1rem;
+  min-width: 0;
+}
+.fischblock > h2 {
+  font-size: 1.55rem;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.2rem;
+  overflow-wrap: break-word;
+}
+
+/* Multi-Column News Grid */
+.grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  min-width: 0;
+  width: 100%;
+}
+@media (max-width: 40rem) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+}
+@media (min-width: 62rem) {
+  .news-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.grid > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.grid .card {
+  margin: 0;
+}
+.news {
+  list-style-type: square;
+  padding-left: 1.15rem;
+  margin: 0.6rem 0;
+  min-width: 0;
+}
+.news li {
+  margin-bottom: 0.85rem;
+  line-height: 1.5;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+.news li a {
+  font-weight: 600;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.news .src {
+  display: block;
+  font-size: 0.82rem;
+  font-style: italic;
+  margin-top: 0.15rem;
+  opacity: 0.82;
+  overflow-wrap: break-word;
+}
+
+/* Kaffeebörse */
+.boerse-grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: 1fr;
+  min-width: 0;
+  width: 100%;
+}
+.boerse-grid > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.ware {
+  min-width: 0;
+  max-width: 100%;
+}
+.kurs {
+  font-size: 1.5rem;
+  margin: 0.4rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.8rem;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+@media (max-width: 32rem) {
+  .kurs {
+    font-size: 1.3rem;
+  }
+}
+.delta {
+  font-size: 1.05rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.delta.up { color: var(--up); }
+.delta.down { color: var(--down); }
+
+.scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0.6rem 0;
+}
+.ware table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.ware th {
+  width: 62%;
+  border: 1px solid var(--line);
+  padding: 0.48rem 0.55rem;
+  text-align: left;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: 0.95rem;
+}
+.ware td {
+  width: 38%;
+  border: 1px solid var(--line);
+  padding: 0.48rem 0.55rem;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+@media (max-width: 32rem) {
+  .ware th,
+  .ware td {
+    padding: 0.4rem 0.45rem;
+    font-size: 0.88rem;
+  }
+}
+caption {
+  font-weight: 700;
+  text-align: left;
+  padding: 0.3rem 0;
+}
+
+/* Hafenklatsch & Logbuch */
+.duo {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  margin: 1.4rem 0;
+}
+.duo .card {
+  margin: 0;
+}
+.klatsch {
+  border-top-color: var(--red);
+}
+.logbuch {
+  font-family: "Courier New", Courier, monospace;
+  background: var(--bg);
+  border: 2px dashed var(--line-dark);
+}
+.kutter {
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Rezepte */
+.rezepte {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+}
+.rezept h3 {
+  margin: 0.2rem 0;
+  color: var(--fg);
+}
+.rezept h4 {
+  margin: 0.8rem 0 0.2rem;
+  font-variant: small-caps;
+}
+.rezept ul,
+.rezept ol {
+  margin: 0.2rem 0;
+  padding-left: 1.3rem;
+}
+
+/* Kleinanzeigen */
+.anzeigen ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+.anzeigen li {
+  border: 1px dashed var(--line-dark);
+  padding: 0.7rem 1rem;
+  background: var(--bg);
+}
+.erfunden {
+  text-align: center;
+  font-style: italic;
+  font-size: 0.85rem;
+  margin: 1.2rem 0;
+  opacity: 0.8;
+}
+
+/* Leserbrief (19th Century Postmark) */
+.letter {
+  border: 3px double var(--line-dark);
+  background: var(--card);
+}
+.letter .badge {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 0.2rem 0.8rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.absender {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+.stamp {
+  width: 4.8rem;
+  height: 5.4rem;
+  display: grid;
+  place-items: center;
+  color: var(--red);
+  background: var(--bg);
+  padding: 0.4rem;
+  border: 3px dotted var(--red);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+  transform: rotate(-3deg);
+}
+.stamp .ico {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0;
+}
+.sig {
+  text-align: right;
+  font-style: italic;
+  margin: 0.5rem 0;
+}
+.antwort {
+  border-left: 4px solid var(--accent);
+  padding: 0.5rem 1rem;
+  margin: 1.2rem 0 0;
+  background: var(--bg);
+  font-style: italic;
+}
+
+/* Footer Colophon */
+footer {
+  background: var(--mast);
+  color: var(--mastfg);
+  margin-top: 3rem;
+  padding: 2.2rem 1rem calc(2.2rem + env(safe-area-inset-bottom, 0));
+  text-align: center;
+  border-top: 4px double var(--gold);
+}
+.colophon-ornament {
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+.colophon p {
+  margin: 0.3rem 0;
+}
+.colophon-sub {
+  font-size: 0.85rem;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+/* Archive list styles */
+.archive {
+  list-style: none;
+  padding: 0;
+}
+.archive li {
+  margin: 0.8rem 0;
+}
+.archive li a {
+  font-size: 1.15rem;
+  font-weight: 700;
+}

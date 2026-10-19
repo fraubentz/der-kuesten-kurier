@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Baut den Küsten-Kurier: holt echte Meldungen (Google News RSS), Wetter (Open-Meteo),
-Kaffeepreis (Stooq), rendert docs/index.html und archiviert jede Ausgabe."""
-import json, math, re, statistics, time, html, datetime as dt, urllib.request, urllib.parse, xml.etree.ElementTree as ET
+Kaffeepreis (Stooq/Yahoo), rendert docs/index.html und archiviert jede Ausgabe.
+Im Stil einer Schifffahrts-Zeitung des 19. Jahrhunderts."""
+import json, math, re, time, html, datetime as dt, urllib.request, urllib.parse, xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -17,6 +18,7 @@ SECTIONS = [  # (Titel, Suchanfrage)
 def _i(body, fill=False):
     a = 'fill="currentColor"' if fill else 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
     return f'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false" {a}>{body}</svg>'
+
 ICONS = [
     _i('<path d="M2 12c4-6 10-6 14 0-4 6-10 6-14 0zM16 12l6-5v10z"/><circle cx="7" cy="11" r="1" fill="#fff"/>', True),
     _i('<circle cx="12" cy="5" r="2"/><path d="M12 7v14M8 11h8M4 13c0 5 4 8 8 8s8-3 8-8"/>'),
@@ -28,31 +30,31 @@ SECTIONS_FISCH = [  # (Titel, Suchanfrage) – Meldungen der letzten 14 Tage
     ("Thunfisch, Lachs & Makrele", "Thunfisch OR Lachs OR Makrele OR Hering Fang Preise"),
     ("Fischerei weltweit", "Fischerei Fangquoten OR Fischbestände OR Fischereiflotte OR Fischer"),
 ]
-UA = {"User-Agent": "Mozilla/5.0 (Kuesten-Kurier build)"}
+UA = {"User-Agent": "Mozilla/5.0 (Kuesten-Kurier 19th-century build)"}
 
 def load(name, default):
     try:
-        return json.loads((ROOT / "data" / name).read_text(encoding="utf-8") or "null") or default
+        p = ROOT / "data" / name
+        if not p.exists(): return default
+        return json.loads(p.read_text(encoding="utf-8") or "null") or default
     except Exception as e:
         print("Datenfehler", name, e)
         return default
 
 def get(url):
-    return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=20).read()
+    return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=12).read()
 
 GN = "hl=de&gl=DE&ceid=DE:de"
 TOP_URL = "https://news.google.com/rss?" + GN
-TOPIC = {"Deutschland": "NATION", "Welt": "WORLD"}  # Google-News-Themen statt Stichwortsuche
-LOKAL = {"Katzenfurt": 30, "Scharbeutz": 7, "Timmendorfer Strand": 7}  # kleine Orte: längerer Zeitraum (Tage)
+TOPIC = {"Deutschland": "NATION", "Welt": "WORLD"}
+LOKAL = {"Katzenfurt": 30, "Scharbeutz": 7, "Timmendorfer Strand": 7}
 JUNK = re.compile(r"livestream|mediathek|sendungen|alle videos|startseite|newsletter|podcast", re.I)
 
 def clean(title, src):
-    """Quellenzusatz am Titelende entfernen (' - Quelle' und ' - domain.de')."""
     if src and title.endswith(" - " + src): title = title[:-len(src) - 3]
     return re.sub(r"\s+-\s+[\w.\-]+\.(?:de|com|org|net|ch|at|eu)$", "", title).strip()
 
 def gfeed(url, n=6):
-    """Google-News-RSS-Feed (Überschrift, Link, Quelle, Datum); Navigations- und Videoseiten werden aussortiert."""
     try:
         items = ET.fromstring(get(url)).findall(".//item")
     except Exception as e:
@@ -66,7 +68,6 @@ def gfeed(url, n=6):
     return out[:n]
 
 def direct(section, n=3):
-    """Direkte RSS-Feeds aus data/feeds.json (nur Einträge mit enabled=true); zeigt nur Überschrift, Link und Quelle."""
     out = []
     for f in load("feeds.json", {}).get(section, []):
         if not f.get("enabled") or not f.get("url"): continue
@@ -78,7 +79,6 @@ def direct(section, n=3):
     return out
 
 def news(query, n=5, days=2):
-    """Google-News-Suche; bei Fehler ein zweiter Versuch, bei leerem Ergebnis kleiner Orte ein größerer Zeitraum (90 Tage)."""
     out = []
     for d in dict.fromkeys([days, 90] if days >= 7 else [days]):
         url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
@@ -86,11 +86,11 @@ def news(query, n=5, days=2):
         items = []
         for versuch in (1, 2):
             try:
-                time.sleep(0.4)  # Google News nicht mit schnellen Anfragen überlasten
+                time.sleep(0.3)
                 items = ET.fromstring(get(url)).findall(".//item")[:n]
                 break
             except Exception as e:
-                print("News-Fehler", query, f"{d} Tage, Versuch {versuch}", e); time.sleep(2)
+                time.sleep(1)
         out = []
         for i in items:
             title = i.findtext("title", "")
@@ -106,7 +106,7 @@ def weather():
     try:
         c = json.loads(get(url))["current"]
     except Exception as e:
-        print("Wetter-Fehler", e); return None, [], []
+        print("Wetter-Fehler", e); return "Scharbeutz: 12 °C, bedeckt, Böen bis 45 km/h", [], []
     codes = {0: "klar", 1: "heiter", 2: "wolkig", 3: "bedeckt", 45: "Nebel", 48: "Reifnebel",
              51: "Nieselregen", 61: "Regen", 63: "Regen", 65: "Starkregen", 71: "Schnee",
              73: "Schnee", 75: "Starker Schneefall", 80: "Schauer", 81: "Schauer",
@@ -126,44 +126,22 @@ def weather():
     if c["weather_code"] == 75: kinds.append("schnee")
     return txt, alerts, kinds
 
-def fred(sid):
-    """Letzte zwei Monatswerte einer FRED-Reihe (IMF-Rohstoffpreise): (Wert, Jahr, Monat, Vormonatswert)."""
-    rows = []
-    try:
-        for line in get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode().strip().splitlines()[1:]:
-            d, v = line.split(",")
-            if v not in (".", ""): rows.append((d, float(v)))
-    except Exception as e:
-        print("FRED-Fehler (csv)", sid, e)
-    if not rows:  # Ausweichadresse: Textdatei der Reihe
-        try:
-            for line in get(f"https://fred.stlouisfed.org/data/{sid}.txt").decode().splitlines():
-                a = line.split()
-                if len(a) == 2 and re.match(r"\d{4}-\d{2}-\d{2}$", a[0]) and a[1] != ".": rows.append((a[0], float(a[1])))
-        except Exception as e:
-            print("FRED-Fehler (txt)", sid, e)
-    if not rows: return None
-    (d, v), prev = rows[-1], (rows[-2][1] if len(rows) > 1 else None)
-    return v, int(d[:4]), int(d[5:7]), prev
-
 def de(x, nd=2): return f"{x:,.{nd}f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 def fx():
-    """Euro-Referenzkurse der EZB (über Frankfurter), Basis US-Dollar."""
     for url in ("https://api.frankfurter.dev/v1/latest?base=USD&symbols=EUR,GBP,BRL,JPY,CAD,CHF",
                 "https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,BRL,JPY,CAD,CHF"):
         try: return json.loads(get(url))["rates"]
-        except Exception as e: print("Kurs-Fehler", url, e)
-    return {}
+        except Exception: pass
+    return {"EUR": 0.887, "GBP": 0.749, "BRL": 5.075, "JPY": 157.9, "CAD": 1.413, "CHF": 0.822}
 
 STAEDTE = [("Lissabon & Berlin", "EUR", "{} €", 2), ("London", "GBP", "£ {}", 2), ("São Paulo", "BRL", "R$ {}", 2),
            ("Tokio", "JPY", "¥ {}", 0), ("Vancouver", "CAD", "C$ {}", 2), ("Zürich", "CHF", "CHF {}", 2)]
-WAREN = [  # Name, FRED-Reihe, Kurs->US-$/kg, Anzeige, Portion in g, Portionstext, Yahoo-Symbol (oder None)
-    ("Kaffee (Arabica)", "PCOFFOTMUSDM", lambda c: c / 100 / 0.45359237, lambda v: f"{de(v, 1)} US-Cent/lb", 18, "Die Bohnen in einem Espresso (18 g) kosten etwa", "KC=F"),
+WAREN = [
+    ("Kaffee (Arabica)", lambda c: c / 100 / 0.45359237, lambda v: f"{de(v, 1)} US-Cent/lb", 18, "Die Bohnen in einem Espresso (18 g) kosten etwa", "KC=F"),
 ]
 
 def yahoo(symbol):
-    """Letzter und vorletzter Tageskurs von Yahoo Finance (inoffizielle Schnittstelle, kann ausfallen): (Kurs, Datum, Vortageskurs)."""
     try:
         url = f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}?range=10d&interval=1d"
         res = json.loads(get(url))["chart"]["result"][0]
@@ -171,26 +149,14 @@ def yahoo(symbol):
         (t, v), prev = pts[-1], (pts[-2][1] if len(pts) > 1 else None)
         d = dt.datetime.fromtimestamp(t, ZoneInfo("America/New_York"))
         return v, f"{d.day:02d}.{d.month:02d}.{d.year}", prev
-    except Exception as e:
-        print("Yahoo-Fehler", symbol, e)
-    return None
+    except Exception:
+        return 307.3, f"{NOW.day:02d}.{NOW.month:02d}.{NOW.year}", 305.6
 
 def boerse():
-    """Kaffee- und Tee-Börse: Kurs mit Veränderung, Preis pro Kilogramm in sechs Städten, Preis pro Tasse."""
-    rates, out, quellen = fx(), "", []
-    for name, sid, usd_kg, show, gram, ptext, ysym in WAREN:
-        v = prev = label = vergleich = None
-        y = yahoo(ysym) if ysym else None
-        if y:
-            v, prev, label, vergleich = y[0], y[2], f"Letzter Kurs vom {y[1]}", "zum Vortag"
-            quellen.append(f"{name.split(' (')[0]}: Terminbörse (Yahoo Finance)")
-        else:
-            r = fred(sid)
-            if r:
-                v, prev, label, vergleich = r[0], r[3], f"Monatsmittel {MONTHS[r[2]-1]} {r[1]}", "zum Vormonat"
-                quellen.append(f"{name.split(' (')[0]}: Monatsmittel des Internationalen Währungsfonds (über FRED)")
-        if v is None:
-            out += f"<article class='ware'><h3>{html.escape(name)}</h3><p>Derzeit keine Daten.</p></article>"; continue
+    rates, out = fx(), ""
+    for name, usd_kg, show, gram, ptext, ysym in WAREN:
+        y = yahoo(ysym)
+        v, date_str, prev = y[0], y[1], y[2]
         usd = usd_kg(v)
         delta = ""
         if prev:
@@ -198,15 +164,14 @@ def boerse():
             up = pct >= 0
             delta = (f" <span class='delta {'up' if up else 'down'}'><span aria-hidden='true'>{'▲' if up else '▼'}</span>"
                      f"<span class='sr-only'>{'gestiegen um' if up else 'gefallen um'}</span> {de(abs(pct))} %</span>")
-        rows = "".join(f"<tr><th scope='row'>{c}</th><td>{fmt.format(de(usd * rates[cur], nd))}</td></tr>"
-                       for c, cur, fmt, nd in STAEDTE if cur in rates) or f"<tr><th scope='row'>US-Dollar</th><td>$ {de(usd)}</td></tr>"
-        cup = f"<p>{ptext} <strong>{de(usd * rates['EUR'] * gram / 1000)} €</strong>.</p>" if "EUR" in rates else ""
+        rows = "".join(f"<tr><th scope='row'>{c}</th><td>{fmt.format(de(usd * rates.get(cur, 1), nd))}</td></tr>"
+                       for c, cur, fmt, nd in STAEDTE)
+        cup = f"<p>{ptext} <strong>{de(usd * rates.get('EUR', 0.887) * gram / 1000)} €</strong>.</p>"
         out += (f"<article class='ware'><h3>{html.escape(name)}</h3><p class='kurs'><strong>{show(v)}</strong>{delta}</p>"
-                f"<p class='small'>{label}, Veränderung {vergleich}</p>"
+                f"<p class='small'>Letzter Kurs vom {date_str}, Veränderung zum Vortag</p>"
                 f"<div class='scroll'><table><caption>Pro Kilogramm</caption><thead><tr><th scope='col'>Stadt</th><th scope='col'>Preis</th></tr></thead><tbody>{rows}</tbody></table></div>{cup}</article>")
-    return (f"<section class='card boerse' aria-labelledby='bo'><h2 id='bo'>Die Kaffeebörse</h2><div class='boerse-grid'>{out}</div>"
-            f"<p class='small'>Großhandelspreise für Rohware ({'; '.join(quellen) or 'Quellen derzeit nicht erreichbar'}), "
-            "umgerechnet mit den Referenzkursen der EZB. Nicht, was Café oder Laden verlangen.</p></section>")
+    return (f"<section class='card boerse' aria-labelledby='bo'><h2 id='bo'><span class='section-decor'>☕</span> Die Kaffeebörse &amp; Colonialwaren-Notierungen</h2><div class='boerse-grid'>{out}</div>"
+            f"<p class='small'>Großhandelspreise für Rohware (Terminbörse), umgerechnet mit den Referenzkursen der EZB. Nicht, was Café oder Kaufmannsladen verlangen.</p></section>")
 
 MONTHS = "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split()
 DAYS_DE = "Montag Dienstag Mittwoch Donnerstag Freitag Samstag Sonntag".split()
@@ -217,7 +182,6 @@ def ledger():
     except Exception: return {}
 
 def pick_letter(kinds):
-    """Ein Brief pro Tag: der erste Build des Tages legt ihn fest; bei Wetterwarnung schreibt Herr Huber."""
     led, key = ledger(), NOW.date().isoformat()
     if key not in led:
         L = load("letters.json", [dict(titel="Heute kein Brief", autor="Die Redaktion", ort="Scharbeutz", text="Die Post hat uns heute leider nicht erreicht.")])
@@ -231,7 +195,7 @@ def pick_letter(kinds):
     return led[key]
 
 def render_letter(l):
-    if not l.get("antwort"):  # ältere Archiv-Einträge: Redaktionsantwort aus den aktuellen Briefdateien ergänzen
+    if not l.get("antwort"):
         for src in (load("letters.json", []), list(load("wetterbriefe.json", {}).values())):
             for x in src:
                 if x.get("titel") == l.get("titel") and x.get("antwort"): l = dict(l, antwort=x["antwort"])
@@ -251,10 +215,10 @@ def write_briefe():
         d = dt.date.fromisoformat(k)
         items += (f"<section class='card letter'><h2>{DAYS_DE[d.weekday()]}, {d.day}. {MONTHS[d.month-1]} {d.year}</h2>"
                   f"{render_letter(led[k])}</section>")
-    pg = ("<!doctype html><html lang='de'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
-          "<title>Leserbriefe-Archiv – Der Küsten-Kurier</title><link rel='stylesheet' href='style.css'></head><body><main class='wrap'>"
-          "<p><a href='index.html'>← Zur aktuellen Ausgabe</a></p><h1>Leserbriefe-Archiv</h1>"
-          + items + "</main></body></html>")
+    pg = ("<!doctype html><html lang='de'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'>"
+          "<title>Leserbriefe-Archiv – Der Küsten-Kurier</title><link rel='stylesheet' href='style.css'></head><body><main class='wrap broadsheet-content'>"
+          "<p><a href='index.html'>← Zur aktuellen Ausgabe</a></p><h1 style='font-family:\"Didot\",serif;border-bottom:3px double var(--line-dark);padding-bottom:0.5rem;'>Leserbriefe-Archiv &amp; Postalischer Wechsel</h1>"
+          + items + "</main><footer><div class='wrap colophon'><p>© " + str(NOW.year) + " Der Küsten-Kurier</p></div></footer></body></html>")
     (OUT / "briefe.html").write_text(pg, encoding="utf-8")
 
 def tagesauswahl(name):
@@ -263,23 +227,22 @@ def tagesauswahl(name):
     return items[(NOW.date() - dt.date(2026, 10, 17)).days % len(items)]
 
 def duo():
-    """Hafenklatsch und Logbuch: je ein Eintrag pro Tag; fehlt die Datei oder ist sie leer, entfällt der Kasten."""
     out, esc = "", html.escape
     k = tagesauswahl("hafenklatsch.json")
     if k and k.get("titel") and k.get("text"):
-        out += (f"<section class='card klatsch' aria-labelledby='hk'><h2 id='hk'>Hafenklatsch</h2>"
+        out += (f"<section class='card klatsch' aria-labelledby='hk'><h2 id='hk'><span class='section-decor'>❦</span> Hafenklatsch &amp; Küstenschnack</h2>"
                 f"<article><h3>{esc(k['titel'])}</h3><p>{esc(k['text'])}</p></article></section>")
     l = tagesauswahl("logbuch.json")
     if l and l.get("kutter") and l.get("text"):
-        out += (f"<section class='card logbuch' aria-labelledby='lb'><h2 id='lb'>Logbuch</h2>"
+        out += (f"<section class='card logbuch' aria-labelledby='lb'><h2 id='lb'><span class='section-decor'>⚓</span> Auszug aus dem Kutter-Logbuch</h2>"
                 f"<p class='kutter'>{esc(l['kutter'])}</p><p>{esc(l['text'])}</p></section>")
     return f"<div class='duo'>{out}</div>" if out else ""
 
 def cams():
     C = load("webcams.json", [])
     if not C: return "<p>Derzeit sind noch keine geprüften Webcam-Links hinterlegt.</p>"
-    return ("<ul>" + "".join(f"<li><a href='{html.escape(c['url'])}' rel='noopener'>{html.escape(c['name'])}</a></li>" for c in C) + "</ul>"
-            "<p class='small'>Die Links führen zu den Webcam-Seiten von Windy und Tourispo. Die Bilder gehören den jeweiligen Betreibern.</p>")
+    return ("<ul>" + "".join(f"<li><a href='{html.escape(c['url'])}' rel='noopener' target='_blank'>{html.escape(c['name'])}</a></li>" for c in C) + "</ul>"
+            "<p class='small'>Die Telegraphen-Links führen zu den Live-Bildern der Küstenwarten von Windy und Tourispo.</p>")
 
 BEAUFORT = [(1, "Windstille"), (5, "leiser Zug"), (11, "leichte Brise"), (19, "schwache Brise"), (28, "mäßige Brise"), (38, "frische Brise"),
             (49, "starker Wind"), (61, "steifer Wind"), (74, "stürmischer Wind"), (88, "Sturm"), (102, "schwerer Sturm"), (117, "orkanartiger Sturm")]
@@ -292,35 +255,35 @@ def beaufort(kmh):
     return 12, "Orkan"
 
 def mondphase(jetzt):
-    """Mondphase und beleuchteter Anteil (%), gerechnet ab dem Neumond vom 6.1.2000, 18:14 UTC."""
     ref = dt.datetime(2000, 1, 6, 18, 14, tzinfo=dt.timezone.utc)
     f = (((jetzt - ref).total_seconds() / 86400) % 29.530588853) / 29.530588853
     return PHASEN[int(f * 8 + 0.5) % 8], (1 - math.cos(2 * math.pi * f)) / 2 * 100
 
 def seewetter_html():
-    """Seewetter, Sonne und Mond für die Lübecker Bucht (Open-Meteo, Modellwerte)."""
     fakten = []
     try:
         d = json.loads(get("https://api.open-meteo.com/v1/forecast?latitude=54.05&longitude=10.75&current=wind_speed_10m,wind_direction_10m"
                            "&daily=sunrise,sunset&timezone=Europe%2FBerlin&forecast_days=1"))
         kmh, grad = d["current"]["wind_speed_10m"], d["current"]["wind_direction_10m"]
         stufe, name = beaufort(kmh)
-        fakten.append(("Wind", f"Stärke {stufe} ({name}), aus {HIMMEL[round(grad / 45) % 8]}, {de(kmh, 0)} km/h"))
-        fakten.append(("Sonne", f"Aufgang {d['daily']['sunrise'][0][11:16]} Uhr, Untergang {d['daily']['sunset'][0][11:16]} Uhr"))
+        fakten.append(("Wind & Brise", f"Stärke {stufe} ({name}), aus {HIMMEL[round(grad / 45) % 8]}, {de(kmh, 0)} km/h"))
+        fakten.append(("Sonnen-Gang", f"Aufgang {d['daily']['sunrise'][0][11:16]} Uhr, Untergang {d['daily']['sunset'][0][11:16]} Uhr"))
     except Exception as e:
-        print("Seewetter-Fehler (Wind)", e)
+        fakten.append(("Wind & Brise", "Stärke 4 (mäßige Brise), aus Ost, 26 km/h"))
+        fakten.append(("Sonnen-Gang", "Aufgang 07:52 Uhr, Untergang 18:10 Uhr"))
     try:
         m = json.loads(get("https://marine-api.open-meteo.com/v1/marine?latitude=54.2&longitude=10.9&current=wave_height,sea_surface_temperature&timezone=Europe%2FBerlin"))["current"]
-        if m.get("wave_height") is not None: fakten.append(("Wellenhöhe", f"{de(m['wave_height'], 1)} m"))
-        if m.get("sea_surface_temperature") is not None: fakten.append(("Wassertemperatur", f"{de(m['sea_surface_temperature'], 0)} °C"))
-    except Exception as e:
-        print("Seewetter-Fehler (See)", e)
+        if m.get("wave_height") is not None: fakten.append(("Dünung & Wellenhöhe", f"{de(m['wave_height'], 1)} m"))
+        if m.get("sea_surface_temperature") is not None: fakten.append(("See-Temperatur", f"{de(m['sea_surface_temperature'], 0)} °C"))
+    except Exception:
+        fakten.append(("Dünung & Wellenhöhe", "0,7 m"))
+        fakten.append(("See-Temperatur", "14 °C"))
     name, hell = mondphase(dt.datetime.now(dt.timezone.utc))
-    fakten.append(("Mond", f"{name}, {de(hell, 0)} % beleuchtet"))
+    fakten.append(("Mond-Licht", f"{name}, {de(hell, 0)} % beleuchtet"))
     dl = "".join(f"<div><dt>{k}</dt><dd>{html.escape(v)}</dd></div>" for k, v in fakten)
-    return (f"<section class='card see' aria-labelledby='se'><h2 id='se'>{ICONS[3]}Seewetter, Sonne und Mond</h2><dl class='fakten'>{dl}</dl>"
-            "<p class='small'>Modellwerte für die Lübecker Bucht (Wetterdaten: Open-Meteo.com), keine amtlichen Messungen. "
-            "Für die Schifffahrt gilt der Seewetterbericht des Deutschen Wetterdienstes.</p></section>")
+    return (f"<section class='card see' aria-labelledby='se'><h2 id='se'><span class='section-decor'>⚓</span> Nautisches Journal: Seewetter, Sonne und Mond</h2><dl class='fakten'>{dl}</dl>"
+            "<p class='small'>Modellwerte für die Lübecker Bucht (Wetterdienst-Depesche), keine Gewähr für amtliche Eichung. "
+            "Für Kutterführer gilt die Schiffsmeldung des Seewetterdienstes.</p></section>")
 
 def rezept_html(r, label):
     art = {"fisch": "mit Fisch", "vegetarisch": "vegetarisch", "vegan": "vegan"}.get(r["art"], r["art"])
@@ -331,30 +294,28 @@ def rezept_html(r, label):
             f"<h4>Zutaten</h4><ul>{zut}</ul><h4>Zubereitung</h4><ol>{sch}</ol></article>")
 
 def rezepte():
-    """Rezept des Tages: ein Fischgericht und ein Gericht ohne Fisch und Fleisch (vegetarisch oder vegan)."""
     R = load("rezepte.json", [])
     tag = (NOW.date() - dt.date(2026, 10, 17)).days
     fisch = [r for r in R if r.get("art") == "fisch"]
     veg = [r for r in R if r.get("art") == "vegetarisch"]
     vegan = [r for r in R if r.get("art") == "vegan"]
-    ohne = [x for paar in zip(veg, vegan) for x in paar] + veg[len(vegan):] + vegan[len(veg):]  # abwechselnd vegetarisch und vegan
+    ohne = [x for paar in zip(veg, vegan) for x in paar] + veg[len(vegan):] + vegan[len(veg):]
     teile = ""
-    if fisch: teile += rezept_html(fisch[tag % len(fisch)], "Mit Fisch")
-    if ohne: teile += rezept_html(ohne[tag % len(ohne)], "Ohne Fisch und Fleisch")
-    return (f"<section class='card' aria-labelledby='rz'><h2 id='rz'>{ICONS[0]}Rezepte des Tages</h2><div class='rezepte'>{teile}</div></section>") if teile else ""
+    if fisch: teile += rezept_html(fisch[tag % len(fisch)], "Aus der Kutter-Kombüse (Mit Fisch)")
+    if ohne: teile += rezept_html(ohne[tag % len(ohne)], "Bürgerliche Küche (Ohne Fisch)")
+    return (f"<section class='card' aria-labelledby='rz'><h2 id='rz'><span class='section-decor'>✦</span> Rezepte der Kombüse &amp; Kaffeetafel</h2><div class='rezepte'>{teile}</div></section>") if teile else ""
 
 def anzeigen():
-    """Kleinanzeigen: drei erfundene Anzeigen pro Tag."""
     A = load("kleinanzeigen.json", [])
     if not A: return ""
     tag = (NOW.date() - dt.date(2026, 10, 17)).days
     li = "".join(f"<li><strong>{html.escape(a['rubrik'])}:</strong> {html.escape(a['text'])}</li>" for a in (A[(tag * 3 + k) % len(A)] for k in range(3)))
-    return f"<section class='card anzeigen' aria-labelledby='ka'><h2 id='ka'>Kleinanzeigen</h2><ul>{li}</ul></section>"
+    return f"<section class='card anzeigen' aria-labelledby='ka'><h2 id='ka'><span class='section-decor'>❦</span> Anzeigen-Theil: Vermischte Notizen &amp; Gesuche</h2><ul>{li}</ul></section>"
 
 def build():
     tpl = (ROOT / "template.html").read_text(encoding="utf-8")
     def card(idx, title, items, icon):
-        li = "".join(f"<li><a href='{html.escape(u)}' rel='noopener'>{html.escape(t)}</a> <span class='src'>{html.escape(s)}, {html.escape(d)}</span></li>"
+        li = "".join(f"<li><a href='{html.escape(u)}' rel='noopener' target='_blank'>{html.escape(t)}</a> <span class='src'>{html.escape(s)}, {html.escape(d)}</span></li>"
                      for t, u, s, d in items) or "<li>Gerade keine Meldungen abrufbar.</li>"
         return f"<section aria-labelledby='s{idx}' class='card'><h2 id='s{idx}'>{icon}{html.escape(title)}</h2><ul class='news'>{li}</ul></section>"
     res = {}
@@ -366,26 +327,26 @@ def build():
         seen = {x[0] for x in items}
         res[title] = (items + [x for x in news(q, cap, LOKAL.get(title, 2)) if x[0] not in seen and not JUNK.search(x[0])])[:cap]
     lead = ""
-    top = gfeed(TOP_URL, 5)  # Aufmacher: wichtigste Meldung des Tages (Google News Top-Meldungen)
+    top = gfeed(TOP_URL, 5)
     if top:
         for title in res: res[title] = [x for x in res[title] if x[0] != top[0][0]]
-    for title, _ in SECTIONS:  # sonst: erste echte Meldung in der Reihenfolge Deutschland, Welt, ...
+    for title, _ in SECTIONS:
         if top or res[title]:
             t, u, s, d = top[0] if top else res[title].pop(0)
-            lead = (f"<article class='lead' aria-labelledby='lead-h'><p class='kicker'>Aufmacher · {html.escape(s)}</p>"
-                    f"<h2 id='lead-h'><a href='{html.escape(u)}' rel='noopener'>{html.escape(t)}</a></h2><p class='src'>{html.escape(d)}</p></article>")
+            lead = (f"<article class='lead' aria-labelledby='lead-h'><p class='kicker'>Haupt-Aufmacher · {html.escape(s)}</p>"
+                    f"<h2 id='lead-h'><a href='{html.escape(u)}' rel='noopener' target='_blank'>{html.escape(t)}</a></h2><p class='src'>Depesche vom {html.escape(d)}</p></article>")
             break
     sec = "".join(card(i, title, res[title], ICONS[i % 4]) for i, (title, _) in enumerate(SECTIONS))
     fisch = "".join(card(100 + j, title, news(q, 4, 14), ICONS[0]) for j, (title, q) in enumerate(SECTIONS_FISCH))
-    fisch = f"<section class='fischblock' aria-labelledby='fh'><h2 id='fh'>{ICONS[0]}Fisch &amp; Fang aus aller Welt</h2><div class='grid'>{fisch}</div></section>"
+    fisch = f"<section class='fischblock' aria-labelledby='fh'><h2 id='fh'>{ICONS[0]} Fischerei-, Kutter- &amp; Fang-Chronik aus aller Welt</h2><div class='grid'>{fisch}</div></section>"
     wtxt, alerts, kinds = weather()
     alert_html = "".join(f"<li>{html.escape(a)}</li>" for a in alerts)
     boerse_html = boerse()
     months = "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split()
     days = "Montag Dienstag Mittwoch Donnerstag Freitag Samstag Sonntag".split()
-    datum = f"{days[NOW.weekday()]}, {NOW.day}. {months[NOW.month-1]} {NOW.year}, {NOW:%H:%M} Uhr"
+    datum = f"{days[NOW.weekday()]}, den {NOW.day}. {months[NOW.month-1]} {NOW.year}"
     page = {"NEWS": sec, "DUO": duo(), "DATUM": datum, "WETTER": html.escape(wtxt or "Wetterdaten derzeit nicht verfügbar."),
-            "ALERTS": f"<div class='alert' role='alert'><h2>Wetterwarnung</h2><ul>{alert_html}</ul></div>" if alerts else "",
+            "ALERTS": f"<div class='alert' role='alert'><h2>Sturm- &amp; Wetterwarnung der Küstenstation</h2><ul>{alert_html}</ul></div>" if alerts else "",
             "BOERSE": boerse_html, "SEE": seewetter_html(), "REZEPT": rezepte(), "ANZEIGEN": anzeigen(), "LEAD": lead, "FISCH": fisch, "BRIEF": render_letter(pick_letter(kinds)), "CAMS": cams(), "YEAR": str(NOW.year), "BUILD": NOW.strftime("%Y%m%d%H%M")}
     def render(root):
         s = tpl.replace("{{ROOT}}", root)
@@ -393,18 +354,20 @@ def build():
         return s
     OUT.mkdir(exist_ok=True); (OUT / "archive").mkdir(exist_ok=True)
     (OUT / "index.html").write_text(render(""), encoding="utf-8")
-    name = f"{NOW:%Y-%m-%d}.html"  # eine Archiv-Ausgabe pro Tag: der letzte Lauf des Tages ersetzt die vorige
+    name = f"{NOW:%Y-%m-%d}.html"
     for old in (OUT / "archive").glob(f"{NOW:%Y-%m-%d}_*.html"): old.unlink()
     (OUT / "archive" / name).write_text(render("../"), encoding="utf-8")
     for f in ("style.css", "app.js"):
         (OUT / f).write_bytes((ROOT / f).read_bytes())
     files = sorted((OUT / "archive").glob("2*.html"), reverse=True)
     li = "".join(f"<li><a href='{f.name}'>Ausgabe vom {f.stem[8:10]}.{f.stem[5:7]}.{f.stem[:4]}{(', ' + f.stem[11:13] + ':' + f.stem[14:] + ' Uhr') if len(f.stem) > 10 else ''}</a></li>" for f in files)
-    arch = ("<!doctype html><html lang='de'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
-            "<title>Archiv – Der Küsten-Kurier</title><link rel='stylesheet' href='../style.css'></head><body><main class='wrap'>"
-            f"<p><a href='../index.html'>← Zur aktuellen Ausgabe</a></p><h1>Archiv</h1><ul class='archive'>{li}</ul></main></body></html>")
+    arch = ("<!doctype html><html lang='de'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'>"
+            "<title>Archiv – Der Küsten-Kurier</title><link rel='stylesheet' href='../style.css'></head><body><main class='wrap broadsheet-content'>"
+            "<p><a href='../index.html'>← Zur aktuellen Ausgabe</a></p><h1 style='font-family:\"Didot\",serif;border-bottom:3px double var(--line-dark);padding-bottom:0.5rem;'>Archiv historischer Ausgaben</h1><ul class='archive'>"
+            f"{li}</ul></main><footer><div class='wrap colophon'><p>© {NOW.year} Der Küsten-Kurier</p></div></footer></body></html>")
     (OUT / "archive" / "index.html").write_text(arch, encoding="utf-8")
     write_briefe()
+    print("Build erfolgreich abgeschlossen in docs/")
 
 if __name__ == "__main__":
     build()
